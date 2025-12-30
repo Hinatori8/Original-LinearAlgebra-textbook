@@ -1,0 +1,87 @@
+\usepackage{fontspec}
+\usepackage[deluxe]{luatexja-preset}
+\usepackage{mathtools,unicode-math,graphicx,xcolor,siunitx}
+\usepackage{geometry}
+\geometry{left=17.5mm,right=17.5mm,top=21mm,bottom=21mm}
+\usepackage{fancyhdr,float,multirow,booktabs,caption,subcaption,framed,enumitem,tabularx}
+\usepackage[most]{tcolorbox}
+\setlist[itemize]{leftmargin=1.2em}
+\setlist[enumerate]{leftmargin=1.6em}
+\usepackage[unicode]{hyperref}
+\usepackage{bookmark}
+\usepackage[newfloat]{minted}
+%\usemintedstyle{xcode} %colorful
+\urlstyle{same}
+\usepackage{indentfirst}
+\setlength{\parindent}{1em}
+\usepackage{chngcntr}
+\usepackage{titlesec}
+\usepackage{etoolbox}
+\usepackage{cancel}
+\usepackage{appendix}
+% --- セクション群 ---
+\renewcommand{\thesection}{\arabic{section}}
+\renewcommand{\thesubsection}{\thesection.\arabic{subsection}}
+\renewcommand{\thesubsubsection}{\thesubsection.\arabic{subsubsection}}
+% --- 図・表・式・Listingの表示設定 ---
+\renewcommand{\thefigure}{\thesection.\arabic{figure}}
+\renewcommand{\thetable}{\thesection.\arabic{table}}
+\renewcommand{\theequation}{\thesection.\arabic{equation}}
+\renewcommand{\thelisting}{\thesection.\arabic{listing}}
+% --- セクションごとに番号をリセット ---
+\counterwithin{figure}{section}
+\counterwithin{table}{section}
+\counterwithin{equation}{section}
+\counterwithin{listing}{section}
+% --- 見出しの周辺設定 ---
+\setcounter{secnumdepth}{4}
+\titleformat{\section}
+  {\bfseries\fontsize{16pt}{40pt}\selectfont}
+  {\thesection.}{0.8em}{}
+\titlespacing*{\section}{0pt}{1.2ex plus .2ex}{0.8ex}
+\titleformat{\subsection}
+  {\bfseries\fontsize{14pt}{30pt}\selectfont}
+  {\thesubsection}{0.6em}{}
+\titlespacing*{\subsection}{0pt}{1.0ex plus .2ex}{0.6ex}
+\titleformat{\subsubsection}
+  {\bfseries\normalsize}
+  {\thesubsubsection}{0.5em}{}
+\titlespacing*{\subsubsection}{0pt}{0.8ex plus .2ex}{0.4ex}
+\titleformat{\paragraph}[runin]
+  {\normalfont\normalsize\bfseries}
+  {\makebox[1em][c]{\rule{0.7em}{0.7em}}}
+  {0.3em}{}
+\titlespacing*{\paragraph}{0pt}{0.8ex plus .2ex}{1em}
+%--- キャプション出力 ---
+\makeatletter
+\AtBeginDocument{\renewcommand{\numberline}[1]{#1.\hskip0.5em}}
+\patchcmd{\thebibliography}{\section*{\refname}}{}{}{}
+\renewcommand{\thesubfigure}{(\alph{subfigure})}
+\renewcommand{\thesubtable}{(\alph{subtable})}
+\renewcommand{\p@subfigure}{\thefigure}
+\renewcommand{\p@subtable}{\thetable}
+\renewcommand{\theHlisting}{\thesection.\arabic{listing}}
+\makeatother
+\hypersetup{
+  colorlinks=true,
+  linkcolor=red,
+  filecolor=magenta,
+  urlcolor=blue,
+  citecolor=green
+}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\leftmark}
+\fancyhead[C]{}
+\fancyhead[R]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+%\usepackage{lastpage}
+%\setlength{\headheight}{15pt}
+%\cfoot{\thepage/\pageref*{LastPage}}
+\usepackage{tocloft}
+\cftpagenumbersoff{subsubsection}
+\setcounter{tocdepth}{2}
+\newcommand{\ca}{\centering\arraybackslash}
+\title{\Large タイトル}
+\author{2431050 関口陽太}
+\date{\today}
