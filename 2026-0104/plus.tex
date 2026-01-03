@@ -1,0 +1,56 @@
+\section{(独学)QR分解$_{\text{QR Factorization}}$}
+\subsubsection{行列Qと行列Rを作る}
+行列$A$に対し直交化した結果を格納した2つの行列をQとRで表す.既出の公式を行列化している.
+\begin{tcolorbox}[colframe=black!80,colback=white,title=CGS法の行列化]
+\[
+A=QR \qquad \Leftrightarrow \qquad
+\begin{bmatrix}
+    && \\
+    \symbfit{a}_1 & \symbfit{a}_2 & \symbfit{a}_3 \\
+    && 
+\end{bmatrix}=
+\begin{bmatrix}
+    && \\
+    \symbfit{q}_1 & \symbfit{q}_2 & \symbfit{q}_3 \\
+    && 
+\end{bmatrix}
+\begin{bmatrix}
+    \symbfit{q}_1^T\symbfit{a} & \symbfit{q}_1^T\symbfit{b} & \symbfit{q}_1^T\symbfit{c} \\
+    & \symbfit{q}_2^T\symbfit{b} & \symbfit{q}_2^T\symbfit{c} \\
+    & & \symbfit{q}_3^T\symbfit{c}
+\end{bmatrix}
+\]
+\end{tcolorbox}
+\noindent
+行列を展開して比較した方がわかりやすいと思う.
+行列$Q$は正規化した$\symbfit{q}$を列ベクトルとしている.また、互いに直交するため、これは直交行列である.この$\symbfit{q}$はrange(A)(Aの列空間)の基底である.
+\subsection{計算へA=QRを活用する}
+RとQは行列の要素とその配置の関係上,誤差の増加が比較的起きないため,安定して計算できる.\\\hspace{1em}※「条件数」を割愛する関係上,説明はしない.
+\paragraph{最小二乗近似解に対して}
+最小二乗近似解は$A^TA\symbfit{\hat{x}}=A^T\symbfit{b}$を解くことで求めることが可能であった.これは$A\symbfit{x}=\symbfit{b}$を解くより,
+解の誤差の拡大が大きくなる.(※「条件数」で示せるため割愛)そこで$A=QR$を使うと,非常に安定して計算することができる.
+\begin{align*}
+A^TA\symbfit{\hat{x}}=A^T\symbfit{b} \quad \Rightarrow \quad(QR)^TQR\symbfit{\hat{x}} & =(QR)^T\symbfit{b}\\
+                                                         R^T Q^T QR\symbfit{\hat{x}} & = R^T Q^T \symbfit{b}\\ 
+                                                            R^T I R\symbfit{\hat{x}} & = R^TQ^T\symbfit{b} \\
+                                                                  R\symbfit{\hat{x}} & = Q^T\symbfit{b}
+\end{align*}
+感覚的に$A^TA$を用いるより,列ベクトルが互いが直交して干渉し合わない$R$を用いた方が,良いとわかるのではないだろうか.
+\paragraph{一般的なAx=bに対して}
+\begin{align*}
+    A\symbfit{x}=b \quad \Rightarrow \quad QR\symbfit{x} & =\symbfit{b} \\
+                                                        R\symbfit{x} & = Q^T\symbfit{b} \qquad(\text{直交行列より}\;Q^{-1}=Q^T)
+\end{align*}
+
+いずれにしても$R\symbfit{x} = Q^T\symbfit{b}$になる.この形に変形したことでオイシイことがある.行列$R$は上三角行列であるため、これは\textbf{前進消去}が終えた形と一致する.
+つまり、$\symbfit{x}$は\textbf{後退代入}で解くことができる.
+\subsubsection{QR分解の意味}
+理論的には素晴らしいことはわかったが、気づく人はこう思っただろう.「わざわざQR分解するのは計算量が増えるので、Ax=bのまま計算した方がいいのではないか？」「その上CGS法自体が不安定なのに、それを使ってQR分解して何がしたいのか？」
+少なくとも私は最初見た時そう思った.この計算は人間がするのではなく、とんでもなくでかい行列をコンピュータが行う.浮動小数点が発生する環境となるため、誤差を減らして少しでも正しい$\symbfit{x}$を得たいのが目的である.
+まず、直交行列$Q$は誤差を増幅しない.forで繰り返し処理をすると、誤差が重なっていって大きくなるが、それがなくなる.その点がQR分解の恩恵となる.ただ、Qが誤差を増幅させないのは、あくまで理論上であって、精度良くQを計算によって作らなければ意味がない.
+CGS法はそれに関して弱い.もっと誤差を小さく精度良く行列Q,Rの要素を求めていきたい.そこで考えられたのがMGS法である.
+
+次に計算量である.これはしょうがない.Ax=bを愚直に計算するよりは増えてしまう.しかし、精度を優先するため許容する.ただ、あまりにも計算量が増加しては時間がかかってしょうがない.
+ここで考え方を変えて、「QR分解はするが、QR分解を求める早いアルゴリズムを考えていこう」と.
+\section{(独学)特異値分解$_{\text{singular value decomposition}}$}
+Section.\ref{sec:diagonalization}は固有値を用いた分解ということで、\textbf{固有値分解$_{\text{eigenvalue decomposition}}$}と言われている.しかし、固有値分解は全ての行列に対して可能ではない.そこで、全ての行列に対して成り立つ分解方法として\textbf{特異値分解$_{\text{singular value decomposition}}$}がある.\\

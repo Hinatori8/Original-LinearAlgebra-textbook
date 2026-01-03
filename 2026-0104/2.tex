@@ -1,0 +1,1503 @@
+\section{(重要)線形従属と線形独立}\label{sec:depends}
+前期テキストの発展である列空間においてrankの値の意味について触れた.最後に「独立と従属」が繋がると言って終わりにしていた.では続きをここで書いていこうと思う.\\
+※まだ読んでない人は読んでから再開してほしい.\\
+
+
+線形独立と線形従属は3本のベクトルを用いて考えて理解できればすぐに一般化できる内容であると考えている.
+頭の中で始点が同じ,3本のベクトルをイメージしてほしい.その3本のベクトルを自由に動かす.3つのベクトルが同一平面上とならない方が好ましい.
+これら3つのベクトルには特徴がある.それは\textbf{互いに,他の2本のベクトルで表現できない}ことである.\\
+一番わかり易いのは3軸方向$\symbfit{x}=[p,0,0]^T,\symbfit{y}=[0,q,0]^T,\symbfit{z}=[0,0,r]^T\:(p,q,r \in \mathbb{R})$であるだろう.
+互いが直交しているので互いに表現し合えない.対して,同一平面上にあるベクトルを適切な倍数で伸ばして和をとれば互いにベクトルを表現することができてしまう.
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\textwidth]{depend.png}
+\caption{互いのベクトルの依存関係}
+\label{fig:depend}
+\end{figure}
+遠回りな説明をしているが,図\ref{fig:depend}を見ればわかるように線形結合で表現できるかという違いである.図\ref{fig:depend}左の場合,
+$\symbfit{v}_2$と$\symbfit{v}_1$と$\symbfit{v}_3$は\textbf{線形独立}という.
+ベクトルが他のベクトルに依存せず,独立しているからである.\\
+対して,$\symbfit{w}_2$は$\symbfit{w}_1,\symbfit{w}_3$に依存してしまっている($\symbfit{w}_2=\symbfit{w}_1+\symbfit{w}_3$).厳密には依存させることが可能である.\\
+このとき,$\symbfit{w}_2$と$\symbfit{w}_1$と$\symbfit{w}_3$は\textbf{線形従属}という.
+
+線形結合で表現できる場合は線形従属といえるなら,線形結合の式を用いて線形従属か線形独立かどうかの評価ができそうである.
+\begin{tcolorbox}[colframe=black!80,colback=white,title=線形独立の定義]
+\hspace{1em}ベクトルの列$\symbfit{v}_1,\cdots,\symbfit{v}_n$は,零ベクトルとなる線形結合が$0\symbfit{v}_1+0\symbfit{v}_2+\cdots+0\symbfit{v}_n$のみであるとき,\\
+\textbf{線形独立}である.
+\begin{framed}
+\centering
+\textbf{線形独立}\\
+すべての$x_i$が零のときのみ,$x_1\symbfit{v}_1+x_2\symbfit{v}_2+\cdots+x_n\symbfit{v}_n=\mathbf{0}$となる.
+\end{framed}
+\end{tcolorbox}
+なぜそれで評価できるかは,線形従属のときを考えるとすぐに理解できる.\\
+例えば$\symbfit{v}_1$が$\symbfit{v}_2$の3倍と$\symbfit{v}_3$の$\displaystyle -\frac{1}{2}$倍の線形結合で表現できる場合,\\
+\[ \displaystyle 
+3\symbfit{v}_2-\frac{1}{2}\symbfit{v}_3=\symbfit{v}_1 \quad \leftrightarrow \quad \symbfit{v}_1-3\symbfit{v}_2+\frac{1}{2}\symbfit{v}_3=\symbfit{0}\qquad\text{(線形従属では係数が0ではない!)}
+\]
+
+ストラングの本$^{\cite{strang}}$では言い方についても言及している.
+\begin{itemize}
+    \item \textbf{正しい表現}：「ベクトルの列が線形独立である」
+    \item \textbf{許容される短縮表現}：「ベクトルが線形独立である」
+    \item \textbf{許容できない表現}：「行列が線形独立である」
+\end{itemize}
+ベクトルの列は線形独立するか線形従属するかのどちらかである.
+\subsection{$A\symbfit{x}=\mathbf{0}$を用いて判定する}
+線形独立の定義の式は以下のように見慣れた式に変換できる.
+\[
+x_1\symbfit{v}_1+x_2\symbfit{v}_2+\cdots+x_n\symbfit{v}_n=\mathbf{0}
+\quad\leftrightarrow \quad
+\begin{bmatrix}
+    &&\\
+    \symbfit{v}_1 & \symbfit{v}_2 & \cdots & \symbfit{v}_n\\
+    &&\\
+\end{bmatrix}
+\begin{bmatrix}
+    x_1 \\ x_2 \\ \vdots \\ x_n
+\end{bmatrix}
+=
+\begin{bmatrix}
+    0 \\ 0 \\ \vdots \\ 0
+\end{bmatrix}
+\quad \leftrightarrow \quad
+A\symbfit{x}=\mathbf{0}
+\]
+\begin{framed}
+    $A\symbfit{x}=\mathbf{0}$において,
+\begin{center}
+$\symbfit{x}=\mathbf{0} \quad \cdots$\textbf{線形独立}\\
+$\symbfit{x} \neq \mathbf{0} \quad \cdots$\textbf{線形従属}
+\end{center}
+\end{framed}
+\subsection{非退化とrankでの判別}\label{sub:nondegenerate}
+$A\symbfit{x}=\mathbf{0}$を解くということは,簡約化を強いられるということである.
+ストラングの本で学習していたときは,なぜ簡約化によって線形独立かどうか判断できるかは厳密な数学的な証明がない分曖昧であった.
+ここで説明する内容は私なりに解釈して納得している内容であるため,注意が必要である.\\
+行列において,簡約化をしたとき,次に用いるのはパラメータを用いた解の表現である.前期から引き継ぐが,pivotが存在しない列と対応するようにパラメータを用意していた.その変数の数とpivotがない列の数は一致する.というより,
+pivotが存在しない列があるほどパラメータが必要であった.では線形独立を考えるとき,パラメータは必要だろうか？線形独立であるとき,解は全て0である.パラメータがあるということは最低でも0以外の解があることを寡黙に訴えている.\\
+つまり,\textbf{線形独立であることは前提としてパラメータが1つもあってはならない.}このとき,解は一意に定まる.さらに(右辺)=0であるから,自動的にその一意な解とは$\symbfit{x}=\mathbf{0}$となる.\\
+\begin{tcolorbox}[colframe=black!80,colback=white,title=列について非退化]
+\hspace{1em}pivotがない列を\textbf{自由列}と呼び,変数を\textbf{自由変数}と呼ぶ.\\
+$A$の列ベクトルが線形独立であるのは,その階数rank=n(列数)のときである.pivotがn個あり,自由変数がない.$\symbfit{x}=\mathbf{0}$のみが零空間にある(解である).\\
+※零空間とは$A\symbfit{x}=\mathbf{0}$を満たす解空間のこと.
+\end{tcolorbox}
+pivotがないとパラメータが現れてしまう.このとき,解は\underline{自由}に変わってしまう.\\
+自由変数とパラメータは同じ意味でないので注意.
+例えば$y=ax$でいうと,$a$がパラメータであり,関数の程度を決める.そして,$x$が自由変数であり,任意の値を取る.
+
+ここから知っておくと便利な知識を紹介できる.\\
+横長な行列は全ての列からpivotがなくなる前に簡約化の工程が最後の行まで行ってしまう.つまり,行列の形で自由列の存在が確定するので,線形従属であることが確定する.\\
+$\to$\;\underline{$\mathbf{R}^m$における任意のn個のベクトルは,$n>m$のとき必ず線形従属である.}
+この話はそれでは終わらない.pivotは行列式とも関わりがあったことは前期で少しわかったと思う.また,行列式は逆行列に通ずる.\\
+全ては繋がっているため,rankから,行列式から,逆行列からとどのルートからでも線形独立の話ができる.鍵となるのは$A\symbfit{x}=\mathbf{0}$である.\\
+※これから話す内容にピンとこない場合は前期のテキストを参照すること.\\
+3パターンのアプローチを言語化するのが
+$A\symbfit{x}=\mathbf{0}$のAが逆行列を持つとき,$A^{-1}A\symbfit{x}=A^{-1}\mathbf{0}$より$\symbfit{x}=\mathbf{0}$となる.つまり,\textbf{逆行列を持てば,線形独立}とわかる.
+逆行列の存在判別方法はなんだってあろうか？逆行列を持つとき,$\det(A) \neq 0$であることである.つまり,\textbf{行列式が0でないとき,,線形独立}となる.では行列式が0でないときはどんなときだろう？
+それはpivotが全ての列に存在することである.前期では簡約化と同時に行列式を計算する方法を紹介により,簡約化後の行列式と簡約化までの乗数でAの行列式が求められることがわかった.
+簡約化後の行列の行列式は行列式の計算上,pivotが全ての列に存在しないとどこかで0がかけられて$\det(A)=0$となってしまう.つまり,\textbf{非退化でないと,線形独立とならない}.
+全てが面白いレベルで繋がっているのを感じれただろうか？
+
+\subsection{線形独立かの判断と,そのベクトルの求め方}
+これまでの話の統合である.
+線形代数学の過去問では以下の問題が出題された.
+\begin{framed}
+以下のベクトルの組が1次独立かどうかを判定せよ.一次独立ならば解答欄に「一次独立」と記し,一次従属ならば解答欄に「\underline{整数係数}の非自明一次関係式」を一つ記すこと.
+\[
+    \symbfit{a} = \begin{pmatrix} 5 \\ -1 \\ 4 \end{pmatrix},\;
+    \symbfit{b} = \begin{pmatrix} 1 \\ 1 \\ 5 \end{pmatrix},\;
+    \symbfit{c} = \begin{pmatrix} 1 \\ -1 \\ -2 \end{pmatrix}
+\]
+\end{framed}
+まず$A\symbfit{x}=\mathbf{0}$において$\symbfit{x}=\mathbf{0}$のとき,線形独立であるという話をした.
+そこから簡約化について議論は進んでいった.しかし,正方行列に限り,この列ベクトルが"線形独立か"判断をするに限るなら簡約化は不要であり,もっと簡単に判別できる.
+\begin{tcolorbox}[colframe=black!80,colback=white,title=線形独立かの判断方法]
+\[
+\det(A)\neq 0 \quad\text{であるとき,}A\symbfit{x}=\mathbf{0}\;において\;\symbfit{x}=\mathbf{0}
+\]
+(証明)\\
+$\det(A) \neq 0$\;であるとき,Aは逆行列を持つ.\\
+\begin{align*}
+    A\symbfit{x}=\mathbf{0} \rightarrow A^{-1}A\symbfit{x}&=A^{-1}\mathbf{0} \\
+                            I\symbfit{x}&=\mathbf{0} \qquad \therefore \;\symbfit{x}=\mathbf{0}
+\end{align*}
+\end{tcolorbox}
+つまり,単に線形独立かどうか判断したければ逆行列を持つか調べれ良い
+問題においては
+\[
+A = \begin{bmatrix}\symbfit{a} & \symbfit{b} & \symbfit{c}\end{bmatrix}
+    において,\\
+    \det(A) = 
+    \begin{vmatrix}
+        5 & 1 & 1 \\ -1 & 1 & -1 \\ 4 & 5 & -2
+    \end{vmatrix}
+    = 0
+\]
+つまり,この列ベクトルは\textbf{線形従属}であることがわかる.\\
+※長方形の行列であるなら,非退化かどうかで判断するしかない.\\
+しかし,これでは2分の1で正解してしまう.そのため,テストでは線形従属である場合は1次従属の例をあげろと出題されている.\\
+そのため,結局簡約化(階段化でもいいが結局代入する)をせがまれる.\\
+$[A|\symbfit{b}]=
+    \begin{bmatrix}
+        5 & 1 & 1 & 0 \\
+        -1 & 1 & -1 & 0 \\
+        4 & 5 & -2 & 0 
+    \end{bmatrix}\rightarrow
+    \begin{bmatrix}
+        0 & 6 & -4 & 0 \\
+        1 & -1 & 1 & 0 \\
+        0 & 9 & -6 & 0  
+    \end{bmatrix}\rightarrow
+    \begin{bmatrix}
+        1 & -1 & 1 & 0 \\
+        0 & 3 & -2 & 0 \\
+        0 & 3 & -2 & 0
+    \end{bmatrix}\rightarrow
+    \begin{bmatrix}
+        1 & -1 & 1 & 0 \\
+        0 & 3 & -2 & 0 \\
+        0 & 0 & 0 & 0   
+    \end{bmatrix}\qquad
+    \therefore 
+    \begin{cases*}
+    x_1 -x_2 + x_3 = 0 \\
+    3x_2 -2x_3 = 0 \\
+         x_3 = s 
+    \end{cases*}$
+    \vspace{1mm}\\整数係数なので,s=3が相応しい.よって$x_1=-1,x_2=2,x_3=3$から整理して,
+    $\quad\therefore \symbfit{a}-2\symbfit{b}-3\symbfit{c}=0$
+\medskip\\
+求めることができた.実際にベクトルの値を代入して成り立つか確認してみても良いだろう.
+\subsection{ベクトル空間の基底}\label{sub:space_base}
+「基底」に関して話をしよう.\\
+前期では「列空間」について触れた.文の最後にpivotとrankと「独立と従属」が完全に繋がる.と述べて締めた.
+列ベクトルが骨組みのように空間を作ることを,「\textbf{張る}」という.列空間を張るのに最低何個のベクトルが必要かを考えたときに,その個数がrankとなる.という説明を行った.これについて説明することが可能となる.「独立と従属」の話と繋げるために,再度列空間を用意しよう.
+\begin{equation}\label{colmun_A}
+    C(A)=
+    x\begin{bmatrix}1 \\ 2 \\ 3\end{bmatrix}+
+    y\begin{bmatrix}2 \\ 4 \\ 6\end{bmatrix}+
+    z\begin{bmatrix}2 \\ 1 \\ 1\end{bmatrix}
+\end{equation}
+この列空間は冗長である.もうお分かりだと思うが,$\begin{bmatrix}2 \\ 4 \\ 6\end{bmatrix}$は$\begin{bmatrix}1 \\ 2 \\ 3\end{bmatrix}$のスカラー倍で表現することができる.
+つまり,\eqref{colmun_A}を表現する3つの列ベクトルは\textbf{線形従属}であることがわかる.この列空間のrankは2である.では列ベクトルが2つとななるまで,冗長なベクトルを除外していこう.残ったベクトルはどんなベクトルになるのだろうか？
+これは\textbf{線形独立}に決まっている.
+\begin{tcolorbox}[colframe=black!80,colback=white,title=基底の定義]
+\hspace{1em}ベクトル空間の\textbf{基底}とは,次の2つの性質を持つようなベクトルの列である.\\
+\textbf{基底ベクトルは,線形独立であり,空間を張る.}
+\end{tcolorbox}
+そのため,基底ベクトルを求めよ.と言われたら簡約化を行い,pivot列を書いてやればいい.しかし,理解の質が違う.\\
+読者は運がいい.$A\symbfit{x}=\mathbf{0}$を簡約化し,pivotがない列を基底ベクトルとして書けば良いとしか考えていない愚者から頭一つ抜けることに成功した.\\
+思考ルールは以下のようである.
+\begin{enumerate}[label=phase \arabic*]
+    \item 基底ベクトルはその空間を張るために必要な最低限の列ベクトルのことである.
+    \item 条件を満たすには,冗長を許さなければいいので,線形独立になるような列ベクトルを選べばいい.
+    \item 線形独立の定義より,$A\symbfit{x}=\mathbf{0}$を解く.
+    \item 線形独立を満たす列ベクトルはpivot列である.
+    \item pivot列を探すために,簡約化を行おう.
+    \item pivot列の発見.簡約化前の列ベクトルを解答として書いて終了
+\end{enumerate}
+「列空間を張るのに最低何個のベクトルが必要かを考えたときに,その個数をrankというのであった.」の理由がわかったのではないだろうか？
+\begin{center}
+rank\;=\;pivot列の個数\;=\;線形独立な列ベクトル\;=\;基底ベクトルの個数
+\end{center}
+と繋がっていく.\\
+\textbf{例}\\
+$A=\begin{bmatrix}1 & 2 & 3 & 5 \\ 2 & 4 & 8 & 12 \\ 3 & 6 & 7 & 13\end{bmatrix}$において,$A$の張る空間は,
+\begin{equation}\label{colmun_A_over}
+A\symbfit{x}=x
+    \begin{bmatrix}
+        1 \\ 2 \\ 3
+    \end{bmatrix}+y
+    \begin{bmatrix}
+        2 \\ 4 \\ 6
+    \end{bmatrix}+z
+    \begin{bmatrix}
+        3 \\ 8 \\ 7
+    \end{bmatrix}+w
+    \begin{bmatrix}
+        5 \\ 12 \\13
+    \end{bmatrix}\;\text{となる.}
+\end{equation}
+これは列空間$C(A)$が表現する空間としては正しい.ただし,冗長であるので,基底となるベクトルのみで表現することを試みる.
+\textbf{階段化}した行列を$U$としたら,
+\[
+    A=\begin{bmatrix}1 & 2 & 3 & 5 \\ 2 & 4 & 8 & 12 \\ 3 & 6 & 7 & 13\end{bmatrix}
+    \longrightarrow
+    U=\begin{bmatrix}1 & 2 & 3 & 5 \\ 0 & 0 & 2 & 2 \\ 0 & 0 & 0 & 0\end{bmatrix}
+\]
+である.\\
+そう.先ほど,散々簡約化と言ってきたが,パラメータの話をした時点で一部の人は簡約化までする必要がないことに気づいたのはないだろうか？
+前期ではrankを求めるときは,階段化で十分という話をした.そのため,今回も階段化までの処理で,pivotの有無がわかるため,簡約化は不要である.
+pivot列は第1列と第3列なので,
+$A$の基底ベクトルは$\begin{bmatrix}1 \\ 2 \\3\end{bmatrix},\;\begin{bmatrix}3 \\ 8 \\ 7\end{bmatrix}$となることがわかる.
+よって基底ベクトルのみで表した列空間$C(A)$は
+\begin{equation}\label{colmun_A_short}
+    A\symbfit{x}=x
+    \begin{bmatrix}
+        1 \\ 2 \\ 3
+    \end{bmatrix}+y
+    \begin{bmatrix}
+        3 \\ 8 \\ 7
+    \end{bmatrix}\;\text{となる.}
+\end{equation}
+\eqref{colmun_A_over}と\eqref{colmun_A_short}が表現しうる領域は完全に等しい.その表現が冗長であるかどうかの違いである.\\\\
+\hspace{1em}
+では階段化ではなく,より視覚的に分かりやすい式変形から見てみよう.私の考え方が正しければできるはず.\eqref{colmun_A_over}より線形従属の列ベクトルは表\ref{tab:dep}のように,
+他の列ベクトルの線形結合で表現できる.
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|>{\centering\arraybackslash}m{7cm}|>{\centering\arraybackslash}m{8cm}|}\hline
+        \textbf{線形結合} & \textbf{文字での表現} \\ \hline
+        \multicolumn{1}{|c|}{$\begin{bmatrix}2 \\ 4 \\ 6\end{bmatrix}=2\begin{bmatrix} 1 \\ 2 \\ 3\end{bmatrix}$} & 
+        \multicolumn{1}{c|}{$(\text{第2列})=2\;(\text{第1列})$} \\ 
+        $\begin{bmatrix}5 \\ 12 \\ 13\end{bmatrix}=\begin{bmatrix} 2 \\ 4 \\ 6\end{bmatrix}+\begin{bmatrix} 3 \\ 8 \\ 7\end{bmatrix}
+        =2\begin{bmatrix} 1 \\ 2 \\ 3\end{bmatrix}+\begin{bmatrix} 3 \\ 8 \\ 7\end{bmatrix}$ &
+        \begin{tabular}{>{$}r<{$} @{$\;=\;$} >{$}l<{$}}
+        %>{$}...列の先頭に$を暗黙自動追加する. <{$}...列の最後に$を暗黙自動追加する.
+        %@{a}列間の境界線を代わりにaにする.→aで列が揃う.
+        (\text{第4列}) & (\text{第2列}) + (\text{第3列}) \\
+               & 2\;(\text{第1列}) + (\text{第3列})
+        \end{tabular}\\ \hline
+    \end{tabular}
+    \caption{線形結合で表現できる列ベクトル}
+    \label{tab:dep}
+\end{table}
+表\ref{tab:dep}より\eqref{colmun_A_over}を以下のように式変形が可能である.
+\begin{align*}
+    A\symbfit{x}&=x
+    \begin{bmatrix}
+        1 \\ 2 \\ 3
+    \end{bmatrix}+2y
+    \begin{bmatrix}
+        1 \\ 2 \\ 3
+    \end{bmatrix}+z
+    \begin{bmatrix}
+        3 \\ 8 \\ 7
+    \end{bmatrix}+w
+    \left\{
+    \begin{bmatrix}
+        2 \\ 4 \\ 6
+    \end{bmatrix}+
+    \begin{bmatrix}
+        3 \\ 8 \\ 7
+    \end{bmatrix}
+    \right\}\ \\
+    &=x
+    \begin{bmatrix}
+        1 \\ 2 \\ 3
+    \end{bmatrix}+2y
+    \begin{bmatrix}
+        1 \\ 2 \\ 3
+    \end{bmatrix}+z
+    \begin{bmatrix}
+        3 \\ 8 \\ 7
+    \end{bmatrix}+w
+    \left\{2
+    \begin{bmatrix}
+        1 \\ 2 \\ 3
+    \end{bmatrix}+
+    \begin{bmatrix}
+        3 \\ 8 \\ 7
+    \end{bmatrix}
+    \right\}\ \\
+    &=
+    (x+2y+2w)
+    \begin{bmatrix}
+        1 \\ 2 \\ 3
+    \end{bmatrix}+
+    (z+w)
+    \begin{bmatrix}
+        3 \\ 8 \\ 7
+    \end{bmatrix}\\
+    &=
+    \eqref{colmun_A_short}
+\end{align*}
+式変形の結果2つのベクトルで表現できることがわかった.これはズバリ基底となるベクトルと一致する.
+
+\section{そもそもこれから何を学ぶのか,そしてそのメリット}\label{sec:startGram}
+\subsection{グラム--シュミットの正規直交化法とは}
+これから私は「グラム--シュミットの正規直交化法」の説明をする.が,そこに入るまでには多少長いベクトルの
+航海を要する.まず,それによってベクトルがどうなるのかについて説明した方が良いだろう.
+「グラム--シュミットの正規直交化法」は 2 部構成である.\\\\
+\noindent
+\textbf{グラム--シュミットの}
+\begin{quote}
+    このメソッドはヨルゲン・ペダーセン・グラムおよびエルハルト・シュミットに因んで名付けられた.
+グラムが 1883 年にとある論文 (詳細は下に掲載) を発表した.その内容をシュミットがより一般化したことにより
+成っている.(発展) に最小二乗近似解があるのは,このグラム--シュミットの発明のアイデアと深い関わりがあるか
+らだ.
+\vspace{1cm}\\
+論文名:\\
+「実関数の級数展開と最小二乗法による方法について」\\
+ (\textit{”Uber die Entwicklung reeller Funktionen in Reihen mittelst der Methode der kleinsten Quadrate”})\\
+主な内容：
+\begin{itemize}
+    \item 転置表現の内積の実用例
+    \item 最小二乗法に基づいた関数の近似展開
+    \item 内積やベクトル間の直交性の概念を利用
+    \item 後に「グラム行列（Gram matrix）」と呼ばれる概念を提案（内積に基づく実対称行列)
+\end{itemize}
+引用：ChatGPT 4o
+\end{quote}
+\textbf{正規直交化}
+\begin{quote}
+「正規化」とは線形代数学に限らず,これからたびたび聞いていくだろう.感覚的には「「単位あたり」にする」で
+ある.これはどの分野でも大きなズレはない.列ベクトルを正規化する.列ベクトルの\textbf{ノルム}で列ベクトルを割っ
+てあげればいい.列ベクトルにおいてノルムは\textbf{ベクトルの距離}を意味しており,$a=(x,y)$において$\|\mathbf{a}\|=\sqrt{x^2+y^2}$としていた.つまり,単位ベクトルである.また直交とはそのままである.\\
+\hspace{1em}しかし,どれとどれが？それはすべての列ベクトルが互いに直交している.x 軸 y 軸 z 軸のようなものである.この同時を満たすも
+のを「正規直交」という.では正規直交行列の行は3次が最大？それは違う.無限にある.人間が想像できるのが
+3次元座標の直交までだから,n 次元ですべてのベクトルが直交しているのが想像できないだけである.\\
+\end{quote}
+※高校数学ではノルムは$|\quad|$となっており,絶対値と思っていた人が多いと思うが,$\|\quad\|$の書き方を省略していた.
+\subsection{グラム--シュミットの正規直交化法のメリット}
+グラム--シュミットの正規直交化法は,与えられたベクトルの集合を正規直交基底に変換する手法であることはわ
+かったと思う.これによりなんのメリットがあるのだろうか？
+\begin{enumerate}
+    \item \textbf{ベクトルのイメージの明確化}\\
+    直交しているベクトルは互いに独立であり,視覚的にも理解しやすい.
+    私が学習しているときに,良いモデルがあった.
+    \hypertarget{wiki}{}
+    リンク[\url{https://ja.wikipedia.org/wiki/グラム・シュミットの正規直交化法}]もしくはウィキで「グラム--シュミット」と検索
+    してほしい. ここでは映像で見ることができる.この工程がグラム--シュミットの正規直交化法であり,これから何
+    をしていきたいのかを明確に示している.必ず見て欲しいものである.見ると,最後は全てのベクトルが互いに直交する.これがゴールであるが,
+    今は「ふーん」程度で問題ない.さて,
+    ここで思うのは,ベクトルの方向が変わってしまっては,それは別物になってしまうのではないか？ということで
+    ある.そうなると,元の情報は失われるのか？
+    \begin{center}
+        \textbf{A. 直交化によって各ベクトルの方向は変化する.しかし,それによって元の情報が失われるわけではない.}
+    \end{center}
+ 実際,\hyperlink{Gram}{グラム–シュミットの正規直交化法}では,直交化前のベクトル列と直交化後のベクトル列との間に明確な対応関係が存在する.つまり,これは単なる「別表現」への変換であり,可逆的な式変形として扱える.
+    \item \textbf{誤差の低減}\\
+    直交しているのでベクトル同士の干渉が少なく,計算誤差が低減される.特に数値計算においては,直交性が重
+    要な役割を果たす.
+\end{enumerate}
+\vspace{1cm}
+\hspace{1em}
+グラム--シュミットをやる価値を感じられただろうか？\\
+まず私は「射影(Projector)」から説明する.射影はグラム--シュミットの正規直交化法の基礎であるからだ.繰り返しになるが,
+グラム--シュミットは暗記すればこれからの長文を読む必要はない.純粋な好奇心に従って読んでいってほしい.
+\section{射影 (Projection)}\label{sec:projection}
+\subsection{射影について}
+これから射影に入る.しばらくはグラム--シュミットの正規直交化法とは一見何の関係もないことのように感じる
+かもしれないが,脱線はほぼしていない.グラム--シュミットの正規直交化法に必要な知識である.
+\subsubsection{射影とは}
+射影とは,あるベクトルを別のベクトルに「投影」する操作である.特に,直線や平面にベクトルを投影するこ
+とが多い.
+高校物理を少しでもやった人は「力の分解」をやったことがあるだろう.平面に限れば,力の分解はある力を 2 つの成分に分け
+ることである.これを座標軸を置くと,x,y 軸に分解することになる.言い換えれば,斜めの力を x,y 軸に投影し
+ていることになる.これは射影と言える.
+\subsubsection{射影行列}
+もちろん射影は行列で表現することができる.「射影行列」と呼ばれ Projector の P で表される.単位行列の対角
+要素を全て$n$にすると,かけられる行列の全ての要素を$n$倍することができる.これを射影行列は活用している例えば,
+3 次元のベクトルにおいて,xy 平面に射影したい場合,これは z のみを 0 にすれば良い.\\つまり (a, b, c) → (a, b, 0)
+である.これを行列で表現すると
+\[
+P=\begin{pmatrix}
+    1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 0
+\end{pmatrix}
+\]
+となる.これをベクトルにかけると,射影ができる.(実際に計算した方が理解できる)
+\[
+P
+\begin{pmatrix}
+    a \\ b \\ c
+\end{pmatrix}=
+\begin{pmatrix}
+    a \\ b \\ 0
+\end{pmatrix}\]
+\begin{tabularx}{\linewidth}{XX}
+    \hspace{1cm}$\symbfit{p}_1=P_1\symbfit{b}=
+    \begin{bmatrix}
+        0 & 0 & 0 \\ 0 & 0 & 0 \\ 0 & 0 & 1
+    \end{bmatrix}
+    \begin{bmatrix}
+        x \\ y \\ z
+    \end{bmatrix}=
+    \begin{bmatrix}
+        0 \\ 0 \\ z
+    \end{bmatrix}$, 
+    & 
+    $\symbfit{p}_2=P_2\symbfit{b}=
+    \begin{bmatrix}
+        1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 0
+    \end{bmatrix}
+    \begin{bmatrix}
+        x \\ y \\ z
+    \end{bmatrix}=
+    \begin{bmatrix}
+        x \\ y \\ 0
+    \end{bmatrix}$ 
+\end{tabularx}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.35\textwidth]{projector.png}
+    \caption{z軸への射影$\symbfit{p}_1=P_1\symbfit{b}$とxy平面への射影$\symbfit{p}_2=P_2\symbfit{b}$}
+\end{figure}
+当たり前だが$\symbfit{p}_1 + \symbfit{p}_2 = \symbfit{b}$である.盲点だが $P_1 + P_2 = I $である.
+テスト範囲に限れば射影行列を覚えて欲しいわけではない.射影したい行列に射影できる行列 P をかけることで射
+影できることをおさえて欲しい.これは座標軸への射影なので単位行列のようなシンプルなものだが,射影したい
+対象によっては複雑な行列になることもある.大丈夫,グラム--シュミットの正規直交化法の話からはそれていない.
+それは wiki でのイメージ動画でのベクトルの動きを見ればもう射影をしているとわかるだろう.
+次に私たちは直線への射影を考える.徐々にベクトルの次元を上げていくのでついてきて欲しい.
+\subsection{直線への射影}
+直線への射影は実は高校数学で触れている内容である.
+実際に紙に書いてみよう.座標軸をとり,原点を通る直線を引き,その直線から上へ 2cm あたりに点を置く.では
+今置いた点と最も近い直線上の点を考えてみてほしい.その点と今置いた点を結んでほしい.
+直線への射影の完成である.
+見えない？では直線より 2cm 上に置いた点を原点からの伸びるベクトルとしてみるたらどうだろう？実際に矢印
+を書け.また直線上の点に向かって同様に矢印を書け.これで射影に見えるだろう.
+見方を変えよう.これは高校数学ではその点から直線上の最も近い点を求める問題として扱われていたのではない
+だろうか？そして,その点は法線上にある.つまり,直交すると.
+この直交が大事なのである.内積0を活用して,効率よく解くことができる.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.35\textwidth]{projector2.png}
+    \caption{直線への射影}
+    \label{pro_line}
+\end{figure}
+上記の図の理解を試みる.太字なので,全て2次元のベクトルであることに注意.\\
+$\symbfit{b}$に対して射影した点を$\symbfit{p}$ とする$\symbfit{p}$は$\symbfit{a}$のスカラー倍と見れるので,$\symbfit{p}=\hat{x}\symbfit{a}\;(\hat{x}は係数)$と表現できる.\\
+$\symbfit{b}$と$\symbfit{p}$との差を誤差$\symbfit{e}$とすると,$\symbfit{e} = \symbfit{b} - \symbfit{p}$となる.\\
+※誤差と呼ぶ理由は (発展) で説明する.\\
+$\symbfit{a}$と$\symbfit{e}$は直交するので,内積が 0 を満たす.
+\begin{align*}
+    \symbfit{a}^T\symbfit{e} &= \symbfit{a}^T(\symbfit{b}-\symbfit{p}) \\
+                            &= \symbfit{a}^T\symbfit{b} - \symbfit{a}^T\symbfit{p} \\
+                            &= \symbfit{a}^T\symbfit{b} - \hat{x}\symbfit{a}^T\symbfit{a} \\
+                            & = 0
+        \hspace{2cm}\Leftrightarrow\symbfit{a}^T\symbfit{b} - \hat{x}\symbfit{a}^T\symbfit{a} = 0 
+        \qquad \therefore \displaystyle \frac{\symbfit{a}^T\symbfit{b}}{\symbfit{a}^T\symbfit{a}}\;\left(=\frac{\symbfit{a}^T\symbfit{b}}{\|\symbfit{a}\|^2}\right)
+\end{align*}
+よって,射影$\displaystyle \symbfit{p}=\hat{x}\symbfit{a}=\frac{\symbfit{a}^T\symbfit{b}}{\symbfit{a}^T\symbfit{a}}\symbfit{a}$と求めることができた.
+
+導出はシンプルだが本当に正しいだろうか？\\
+$\symbfit{a}^T\symbfit{a}=\|\symbfit{a}\|^2,\;\symbfit{a}^T\symbfit{b}=\|\symbfit{a}\|\|\symbfit{b}\|\cos\theta$より,$\displaystyle \|\symbfit{p}\|=\frac{\|\symbfit{a}\|\|\symbfit{b}\|\cos\theta}{\|\symbfit{a}\|^2}=\|\symbfit{b}\|\cos\theta$となる.\\
+図\ref{pro_line}を見ると,確かに$\symbfit{p}$と$\symbfit{b}$は「なす角$\theta$」との関係が成り立つことがわかる.これは今求めた式と一致する.\\
+(以下枠内は読み飛ばしてOK!)
+\begin{framed}
+これにより直線への射影行列が求まる.
+\[\displaystyle
+    \symbfit{p}=\symbfit{a}\hat{x}=\symbfit{a}\frac{\symbfit{a}^T\symbfit{b}}{\symbfit{a}^T\symbfit{a}}=P\symbfit{b}=\text{より行列は}P=\frac{\symbfit{a}\symbfit{a}^T}{\symbfit{a}^T\symbfit{a}}
+\]
+\textbf{例題}:
+$\symbfit{p}=
+\begin{bmatrix}1 & 2 & 2\end{bmatrix}^T$を通る直線において,$\symbfit{b}=\begin{bmatrix}1 & 1 & 1\end{bmatrix}^T$への射影を求めてみよう.\\
+射影行列$\displaystyle
+    P=\frac{\symbfit{a}\symbfit{a}^T}{\symbfit{a}^T\symbfit{a}}
+     = \frac{1}{9}
+     \begin{bmatrix}
+        1 \\ 2 \\ 2
+     \end{bmatrix} 
+     \begin{bmatrix}
+        1 & 2 & 2
+     \end{bmatrix}
+     = \frac{1}{9}
+     \begin{bmatrix}
+        1 & 2 & 2 \\ 2 & 4 & 4 \\ 2 & 4 & 4
+     \end{bmatrix}
+    $となる.\\
+    求める点$\symbfit{p}$は,$\displaystyle
+    \symbfit{p}=P\symbfit{b}=\frac{1}{9}
+     \begin{bmatrix}
+        1 & 2 & 2 \\ 2 & 4 & 4 \\ 2 & 4 & 4
+     \end{bmatrix}
+     \begin{bmatrix}
+        1 \\ 1 \\ 1
+     \end{bmatrix}
+     = \frac{1}{9}
+     \begin{bmatrix}
+        5 \\ 10 \\ 10
+     \end{bmatrix}$と求まった.行列なので,プログラミング向きの計算ではある.
+\end{framed}
+\subsection{空間と点への応用}
+情報の混乱が起きないように,ここで一旦整理する.
+\begin{framed}
+射影は以下の要件を満たす.
+\begin{enumerate}
+    \item 射影による点$\symbfit{p}$は,射影した点$\symbfit{b}$にとって射影対象の空間上の点においては最小距離の関係になる.
+    \item 射影による点$\symbfit{p}$と射影した点$\symbfit{b}$を結ぶ直線は射影対象上の空間と直交する.
+\end{enumerate}
+※空間：先ほどは直線で議論した.
+\end{framed}
+1. は発展内容で紹介するので,ここからは 2. の直交するに集中して議論していく.
+ではこれから平面,空間への射影を行う.ｎ次元まで対応した話だが,平面をイメージしてほしい.
+n 個のベクトルを $\symbfit{a}_1,\;\symbfit{a}_2,\dots,\;\symbfit{a}_n$とする.これら$\symbfit{a}_i$は線形独立であると仮定する.
+私たちがこれから考える問題は以下である.
+\begin{center}
+    \textbf{与えられたベクトル$\symbfit{b}$に最も近い線形結合$\symbfit{p}=\hat{x}_1\symbfit{a}_1+\hat{x}_2\symbfit{a}_2+\dots+\hat{x}_n\symbfit{a}_n$を求めよ.}
+\end{center}
+$\symbfit{b}$について,$a_i$によって張られた空間へ射影し,$\symbfit{p}$を求める.
+この線形結合を行列表現すると,$\symbfit{p}=A\hat{\symbfit{x}}$となる.皆さんは前期のテキストによって列空間を知っている.$\symbfit{a}_i$によって張られる空間を列空間といい,列空間$\dot{内}$のベクトル$\symbfit{b}$は$A\symbfit{x}$となる.そして,列空間$\dot{外}$のベクトル$\symbfit{b}$に最も近い線形結合$\symbfit{p}(=A\hat{\symbfit{x}})$を求
+めようとしているといえる.$\symbfit{p}$は列空間$A$の要素であり,適切なスカラー倍の$\hat{\symbfit{x}}$で表現できることを意味してい
+る.また空間になっても$\symbfit{p}$は点であり,$\symbfit{b}$と直交する.すなわち,誤差は$\symbfit{b}-\symbfit{p}$で変わらない.同様に求められる
+ことを意味するので,内積0より,
+\begin{align*}\displaystyle
+    A^T\symbfit{e} &= A^T(\symbfit{b}-A\hat{\symbfit{x}})\\
+                   &= 0 \qquad \therefore\;\hat{\symbfit{x}}=\frac{A^T\symbfit{b}}{A^TA}
+\end{align*}
+以上より,私たちは射影の対象がどんな次元のものでも射影することが可能となった.準備はほぼほぼ整って
+いる.おそらく,これがグラム--シュミットとなんの関係があるのか見えていないかもしれない.グラム--シュミットの正規
+直交化法とはどんなものか思い出してみよう.それを行うことで,互いのベクトルを直交化することができるので
+あった.直線の話に限定して話そう.$\symbfit{a}$に対して,$\symbfit{b}$の射影を考えていた.斜面での力の分解と同じ考え方である.
+b を a に対して,平行な方向を垂直な方向に分解する.平行な方向はもちろん$\symbfit{p}$となる.では垂直な方向は？答え
+は$\symbfit{b}-\symbfit{p}$である (図\ref{pro_line}を再度参照すること).列平面のときもそれは変わらないとなると,以下のとおりにまとめる
+ことができる.
+\begin{tcolorbox}[colframe=black!80,colback=white,title=$A$に対して$\symbfit{b}$を垂直に分解する]
+$A$に対して,$\symbfit{b}$を垂直に分解したとき,$A$に対する垂直ベクトルは
+\[\displaystyle
+    \symbfit{b}-\symbfit{p}=\symbfit{b}-\frac{A^T\symbfit{b}}{A^TA}A
+\]
+となる.
+\end{tcolorbox}
+グラム--シュミットのすべてが整った.いよいよ次はグラム--シュミットの説明を始める.
+\section{(重要) グラム–シュミットの正規直交化法}\label{sec:gram}
+では説明を始める.テストでは3次元までしかでないので,それを前提に説明する.
+グラム--シュミットでは3つのベクトルが互いに直交しているのがポイントであった.まず2点を考える.2点では
+もう一方のベクトルと直交していればよい.\\
+3点ではどうだろうか？\\
+まず2点で互いのベクトルと直交させる.そして,残りの1点が直交した2点の両方に直交すれば良い.\\
+では4点は？と,2点を直交,それに対して3点目を直交.それらに対して4点目を\dots と増えていく.
+\begin{framed}
+    ここでは実行する点を$\symbfit{a},\; \symbfit{b},\; \symbfit{c}$とする.\\
+    直交化後のベクトルを$\symbfit{A},\; \symbfit{B},\; \symbfit{C}$とし,正規化後のベクトルを$\symbfit{q}_1,\; \symbfit{q}_2,\; \symbfit{q}_3$とする.\\
+    \paragraph{\;$\symbfit{a}$の直交化：}
+    \[
+    \symbfit{a} = \symbfit{A}
+    \]
+    \paragraph{\;$\symbfit{b}$の直交化：}
+    \[
+    \symbfit{B} = \symbfit{b} - \symbfit{p} = \symbfit{b}-\frac{A^T\symbfit{b}}{A^TA}A
+    \]
+    \paragraph{\;$\symbfit{c}$の直交化：}$\\$
+    直交化は全てのベクトルが互いに直交する必要があるので,$\symbfit{c}$を$\symbfit{a}$と$\symbfit{b}$の両方に直交させる必要がある.
+    \begin{itemize}
+        \item $\symbfit{c}$を$\symbfit{b}$に直交させる場合,
+        \[
+        \symbfit{C} = \symbfit{b} - \symbfit{p}_A = \symbfit{c}-\frac{A^T\symbfit{c}}{A^TA}A
+        \]
+        \item $\symbfit{c}$を$\symbfit{a}$に直交させる場合,
+                \[
+        \symbfit{C} = \symbfit{b} - \symbfit{p}_B = \symbfit{c}-\frac{B^T\symbfit{c}}{B^TB}B
+        \]
+    \end{itemize}
+    この射影を同時におこなうとなると,$\symbfit{C} = \symbfit{c} - (\symbfit{p}_A + \symbfit{p}_B)$とはならないだろうか？\\
+    よって,($\symbfit{p} = \symbfit{p}_A + \symbfit{p}_B$ とすると)
+    \[
+    \symbfit{C} = \symbfit{b} - (\symbfit{p}_A +\symbfit{p}_B) = \symbfit{c}-\frac{B^T\symbfit{c}}{B^TB}B -\frac{A^T\symbfit{c}}{A^TA}A
+    \]
+\end{framed}
+\hypertarget{Gram}{}
+\begin{tcolorbox}[colframe=black!80,colback=white,title=射影からグラム--シュミットの正規直交化法(途中)へ]
+\[\symbfit{\symbfit{q}_1}=\displaystyle\frac{\symbfit{A}}{\|\symbfit{A}\|}\]
+\[\symbfit{B}=\symbfit{b}-\displaystyle\frac{\symbfit{A}^T\symbfit{b}}{\symbfit{A}^T\symbfit{A}}\symbfit{A}\quad \rightarrow \quad \symbfit{\symbfit{q}_2}=\displaystyle\frac{\symbfit{B}}{\|\symbfit{B}\|}\]
+\[\symbfit{C}=\symbfit{c}-
+\displaystyle\frac{\symbfit{A}^T\symbfit{c}}{\symbfit{A}^T\symbfit{A}}\symbfit{A}-
+\displaystyle\frac{\symbfit{B}^T\symbfit{c}}{\symbfit{B}^T\symbfit{B}}\symbfit{B}\quad \rightarrow \quad \symbfit{\symbfit{q}_3}=\displaystyle\frac{\symbfit{C}}{\|\symbfit{C}\|}\]
+\end{tcolorbox}
+これまでの内容を考えると,とても直感的な公式に見えたら十分目標を達成できている.改めて\hyperlink{wiki}{wiki}のサイトを見てみると,
+最初に見たときより何をやっているかが鮮明になったのではないだろうか？式とサイト上でのベクトルの移動を追ってみるとよりわかるかもしれない.
+
+ここからさらに式変形を行う.これは実際に手計算する際でも計算がしやすい.また、発展(Section.\ref{sec:GS_ALG})ではこの計算を行うアルゴリズムである\textbf{Classical Gram--Schmidt}を紹介する.Classicalとあるように古典的なアルゴリズムである.
+これは反復法による数値誤差が安定しないため、後ほど改良版が作られる.
+\begin{framed}
+\paragraph{\;$\symbfit{A}$の式変形：}$\\$
+まず,$\symbfit{q}_1$はそのままである.
+\[\displaystyle
+    \symbfit{q}_1 = \frac{\symbfit{A}}{\|\symbfit{A}\|}
+\]
+\paragraph{\;$\symbfit{B}$の式変形：}$\\$
+変わってくるのは$\displaystyle \symbfit{q}_2$である.$\symbfit{B}=\symbfit{b}-\frac{\symbfit{A}^T\symbfit{b}}{\symbfit{A}^T\symbfit{A}}$を変形する.\\[10pt]
+$\displaystyle \symbfit{B}=\symbfit{b}-\displaystyle\frac{\symbfit{A}^T\symbfit{b}}{\|\symbfit{A}\|^2}\symbfit{A}=
+\frac{\left(\displaystyle\frac{\symbfit{A}}{\|\symbfit{A}\|}\right)^T\symbfit{b}}{\|\symbfit{A}\|}=\frac{\symbfit{q}_1^T\symbfit{b}}{\|\symbfit{A}\|}$となる.また,$\symbfit{A}=\|\symbfit{A}\|\symbfit{q}_1$変形できる.\\[10pt]
+元の式に代入すると,
+$\displaystyle
+\symbfit{B}=\symbfit{b}-\displaystyle\frac{\symbfit{A}^T\symbfit{b}}{\symbfit{A}^T\symbfit{A}}\symbfit{A}=
+\symbfit{b}-\frac{\symbfit{q}_1^T\symbfit{b}}{\|\symbfit{A}\|}\left(\|\symbfit{A}\|\symbfit{q}_1\right)=\symbfit{b}-\left(\symbfit{q}_1^T\symbfit{b}\right)\symbfit{q}_1 \qquad (\symbfit{q}_1^T\symbfit{b}\text{は係数})$\\
+\paragraph{\;$\symbfit{C}$の式変形：}$\\$
+\hspace{1em}
+$\symbfit{C}$も同様に考えると,$\symbfit{C}=\symbfit{c}-\left(\symbfit{q}_1^T\symbfit{c}\right)\symbfit{q}_1-\left(\symbfit{q}_2^T\symbfit{c}\right)\symbfit{q}_2$
+\end{framed}
+\begin{tcolorbox}[colframe=black!80,colback=white,title={(重要)グラム--シュミットの正規直交化法}]
+\[\symbfit{\symbfit{q}_1}=\displaystyle\frac{\symbfit{A}}{\|\symbfit{A}\|}\]
+\[\symbfit{B}=\symbfit{b}-(\symbfit{q}_1^T\symbfit{b})\symbfit{q}_1\quad \rightarrow \quad \symbfit{\symbfit{q}_2}=\displaystyle\frac{\symbfit{B}}{\|\symbfit{B}\|}\]
+\[\symbfit{C}=\symbfit{c}-(\symbfit{q}_1^T\symbfit{c})\symbfit{q}_1-(\symbfit{q}_2^T\symbfit{c})\symbfit{q}_2\quad \rightarrow \quad \symbfit{\symbfit{q}_3}=\displaystyle\frac{\symbfit{C}}{\|\symbfit{C}\|}\]
+\end{tcolorbox}
+\noindent
+\textbf{例題}\\
+以下のベクトルの組にグラム=シュミットの正規直行化を適用せよ.問題文のベクトルの順序を変えないこと.分母の有理化は不要.
+\[\symbfit{a}=\begin{pmatrix}
+        1 \\ 1 \\ 0
+    \end{pmatrix},\;
+    \symbfit{b}=\begin{pmatrix}
+        2 \\ 1 \\ 2
+    \end{pmatrix},\;
+    \symbfit{c}=\begin{pmatrix}
+        1 \\ 2 \\ 1
+    \end{pmatrix}
+\]
+\textbf{解答}\\
+\paragraph{1. $\symbfit{q}_1$ の計算}
+    \[
+    \symbfit{a} = \symbfit{A} \quad \rightarrow \quad
+    \symbfit{q}_1 = \frac{\symbfit{A}}{\|\symbfit{A}\|}
+        = \frac{1}{\sqrt{1^2+1^2+0^2}}\,\symbfit{a}
+        = \frac{1}{\sqrt{2}}\begin{pmatrix}1\\1\\0\end{pmatrix}.
+    \]
+
+    \paragraph{2. $\symbfit{q}_2$ の計算}
+    \[
+        \symbfit{B} = \symbfit{b} - (\symbfit{q}_1^T \symbfit{b})\,\symbfit{q}_1,
+        \qquad
+        \symbfit{q}_1^T \symbfit{b} = \frac{1}{\sqrt2}(2+1+0)=\frac{3}{\sqrt2},
+    \]
+    \[
+    \symbfit{B}
+        = \begin{pmatrix}2\\1\\2\end{pmatrix}
+         - \frac{3}{\sqrt2}\cdot\frac{1}{\sqrt2}
+        \begin{pmatrix}1\\1\\0\end{pmatrix}
+        =\frac{1}{2}\left\{
+        \begin{pmatrix} 4 \\ 2 \\ 4 \end{pmatrix}
+        - \begin{pmatrix} 3 \\ 3 \\ 0 \end{pmatrix}\right\}
+        =\frac{1}{2}
+        \begin{pmatrix} 1 \\ -1 \\ 4 \end{pmatrix},
+    \]
+    \[
+    \symbfit{q}_2 = \frac{\symbfit{B}}{\|\symbfit{B}\|}
+        = \frac{\cancel{\frac{1}{2}}}{\cancel{\frac{1}{2}}\sqrt{1^2+(-1)^2+4^2}}
+        \begin{pmatrix}1 \\ -1 \\ 4\end{pmatrix}
+        = \frac{1}{3\sqrt{2}}
+        \begin{pmatrix}1\\-1\\4\end{pmatrix}.
+    \]
+
+    \paragraph{3. $\symbfit{q}_3$ の計算}
+    \[
+        \symbfit{C} = \symbfit{c} - (\symbfit{q}_1^T \symbfit{c})\,\symbfit{q}_1 - (\symbfit{q}_2^T \symbfit{c})\,\symbfit{q}_2,
+    \]
+    \[
+        \symbfit{q}_1^T \symbfit{c} = \frac{1}{\sqrt2}(1+2+0)=\frac{3}{\sqrt2},\qquad
+        \symbfit{q}_2^T \symbfit{c}
+        = \frac{1}{3\sqrt{2}} \begin{pmatrix}1\\-1\\4\end{pmatrix}^T
+        \begin{pmatrix}1\\2\\1\end{pmatrix}
+        = \frac{1}{\sqrt2},
+    \]
+    \[
+        \symbfit{C}
+        = \begin{pmatrix}1\\2\\1\end{pmatrix}
+        - \frac{3}{\sqrt2}\cdot\frac{1}{\sqrt2}\begin{pmatrix}1\\1\\0\end{pmatrix}
+        - \frac{1}{\sqrt2}\cdot\frac{1}{3\sqrt{2}}\begin{pmatrix}1\\-1\\4\end{pmatrix}
+        = \frac{1}{6}\left\{
+            \begin{pmatrix} 6 \\ 12 \\ 6 \end{pmatrix}
+            - \begin{pmatrix} 9 \\ 9 \\ 0 \end{pmatrix}
+            - \begin{pmatrix} 1 \\ -1 \\ 4 \end{pmatrix}
+            \right\}
+        = \frac{1}{3}\begin{pmatrix} -2 \\ 2 \\ 1 \end{pmatrix}
+    \]
+    \[
+        \symbfit{q}_3
+        = \frac{\symbfit{C}}{\|\symbfit{C}\|}
+        = \frac{\cancel{\frac{1}{3}}}{\cancel{\frac{1}{3}}\sqrt{(-2)^2+2^2+1^2}}\begin{pmatrix} -2 \\ 2 \\1 \end{pmatrix}
+        = \frac{1}{3}\begin{pmatrix} -2 \\ 2 \\1 \end{pmatrix}.
+    \]
+以上より,
+\[\displaystyle
+\symbfit{q}_1=\frac{1}{\sqrt{2}}\begin{pmatrix}1\\1\\0\end{pmatrix},\;
+\symbfit{q}_2=\frac{1}{3\sqrt{2}}\begin{pmatrix}1\\-1\\4\end{pmatrix},\;
+\symbfit{q}_3=\frac{1}{3}\begin{pmatrix} -2 \\ 2 \\1 \end{pmatrix}
+\]
+これで 2a の範囲を終えることができた.どうだっただろうか？グラム--シュミットがちょっとでも直感的であり,
+難しくないものであり,有用であることが伝わったら嬉しい.以降は発展内容であるが,時間的余裕がある人はぜ
+ひ読んでほしい.この発展を読んであなたの知識は完成する.($\leftarrow$私の驕り)
+\section{(発展) 転置による内積の活用例}\label{sec:ad_inner}
+例えば,店舗の在庫数に応じて,売上個数や単価などを表にすると,あっという間に数万行になる.これは行列
+における数万次元の行列ということとおなじである.エクセルなどで普段何気なく計算していることの中で,意識
+外で内積0を考えていることに着目してみる.
+\subsection{モーメント}
+高校物理において,モーメントとして挙げられる例として「モーメント0」である.任意の位置を0とし,正負
+の座標と質量の積の和が0になるとき,静止する,釣り合うといえる.これらのデータを2ベクトルに適切に格納
+することで,内積0と表現することができる.\\
+座標を$x_1,\;x_2,\dots,\;x_n$とし,質量を$m_1,\;m_2,\dots,\;m_n$とすると,モーメントの定義とモーメント0は
+\[
+    m_1x_1+m_2x_2+\dots+m_nx_n=0
+\]
+となる.まさしく,内積の定義である.
+\begin{tcolorbox}[colframe=black!80,colback=white,title=モーメントにおける内積0]
+    正負の座標を$\symbfit{x}=[x_1\;x_2\;\dots\;x_n]^T$とし,質量を$\symbfit{x}=[m_1\;m_2\;\dots\;m_n]^T$格納すると,
+    モーメント0は
+    \[
+    \symbfit{x}^T\symbfit{m}=0
+    \]
+\end{tcolorbox}
+このように,積の和はすべて内積といえるので,「これは内積」と無理矢理にでも言える.
+\subsection{関数空間の直交(フーリエ級数)}
+どこまで書こうか迷ったが,このテキストに故意に微分積分学を導入した方が面白そうなので,これだけ追加で紹介する.
+関数はベクトルである.というのもベクトルは足し算ができる(加法性)とスカラー倍ができること条件である.関数も$f(x)+g(x)$や,$4f(x)$という計算が可能なため,関数はベクトルのグループに属する.\\
+※ベクトルの定義としてはかなり不十分である.イメージの理解として読んでほしい.\\
+$0\leqq x \leqq 2\pi$で定義される関数$f(x),g(x)$において,\textbf{$f(x),g(x)$の内積はどのようなものか？$f(x)$の長さはどのようなものか？}\\
+連続の場合,\textbf{和が積分に置き換わる}.内積は,$v_j\times w_j$の和ではなく,$f(x)\times g(x)$の積分となる.\\
+例えば$f(x)=\sin{x}$の長さは,それ自身の内積により得られる.
+\[(f,f)=\int_{0}^{2\pi}(\sin{x})^2\;dx=\pi. \qquad\sin{x}\text{の長さは}\;\sqrt{\pi}\;\text{である.}\]
+では以下の計算はどうなるだろうか？そして,何を意味するだろうか？\\
+$f(x)=\sin{x},g(x)=\cos{x}$において
+\[\displaystyle
+(f,g)=\int_{0}^{2\pi}\sin{x}\cos{x}\;dx=\frac{1}{2}\int_{0}^{2\pi}\sin{2x}\;dx=-\frac{1}{4}\left[\cos{2x}\right]^{2\pi}_0=0.
+\]
+これは内積の計算であるから,$\sin{x}$と$\cos{x}$は\textbf{関数空間において直交することを意味する}.\\
+実際に2つの波形の交点を見ると,直交している.\\
+※視覚的に分かりやすいのが交点であって,厳密には全体を通して平均的にお互いを打ち消しあっているため0である.\\
+直交しているということは,信号処理などの適切な応用において,干渉を避けて独立に扱うことができることを意味する.
+さらに,${\sin(nx), \cos(nx)}_{n=1}^{\infty}$ という無限個の直交関数を用いれば,連続関数の多くを(関数を関数ベクトルと捉えると)線形結合として近似または完全に表現することができる.
+これは非常に強力な性質であり,後に登場する\textbf{フーリエ級数}$_{\text{Fourier series}}$に繋がっていく.\\
+試しに$f(x)=x^3$に対してフーリエ(正弦)級数で近似してみた.\\
+ここではフーリエ級数がどのように求まり,どうしてそうなるのかは説明しない.
+\[
+S_N(x)=\sum_{k=1}^{N}\displaystyle \frac{2(-1)^k(6-\pi^2k^2)}{k^3}\sin(kx) \qquad \quad\Big(\lim_{N\to\infty}=f(x)\Big)\]
+ポイントは$\sin(kx)$とその係数の和のみで$f(x)$を表現しているということである.
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.3\linewidth}
+        \includegraphics[width=1.1\textwidth]{Fourier(N=5).png}
+        \caption{N=5}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.3\linewidth}
+        \includegraphics[width=1.1\textwidth]{Fourier(N=20).png}
+        \caption{N=20}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.3\linewidth}
+        \includegraphics[width=1.1\textwidth]{Fourier(N=100).png}
+        \caption{N=100}
+    \end{subfigure}
+    \caption{フーリエ(正弦)級数による$f(x)=x^3$の近似と$N$による近似精度の比較}
+\end{figure}
+
+\section{(発展) 最小2乗近似}
+\begin{center}
+    \includegraphics[width=0.7\textwidth]{least_square.png}
+\end{center}
+情報科学科では「数値解析」で扱う分野の内容である.しかし,それにとどまらず,データを扱う統計学や機械学
+習などには必ず触れる内容である.これを線形代数学の側面から学習していこう.
+\subsection{列空間上にない解をいかに近似できるか？}
+私達がこれまで解いてきた問題である $A\symbfit{x}=\symbfit{b}$には解が存在しないという場合もあった.これはすなわち,線形
+結合によって張られた列空間 $A\symbfit{x}$のなかに$\symbfit{b}$が存在しないことを意味する.この場合は「解なし」で終わらせてし
+まっても良い気がするが,ここでは無理にでも解を作ることを考える.解は列空間上のベクトルであることが前提
+である.しかし,$\symbfit{b}$は列空間上にない.解とみなすベクトルは列空間上にない$\symbfit{b}$にできるだけ近い列空間内のベク
+トルがふさわしいだろう.\\
+そのベクトルは射影$\symbfit{p}$であろう.\\
+$\symbfit{b}$と$\symbfit{p}$は上記の条件を満たす最も近いベクトルなので,$A\symbfit{x}=\symbfit{b}$と$A\hat{\symbfit{x}}=\symbfit{p}$において$\hat{\symbfit{x}}$が近似解となりそうだ.\\
+このように射影における解を近似とした解を「\textbf{最小2乗近似解}」という.線形代数学において最小二乗近似解の表現は非常に明快である.$\hat{x}$と$A$の関係式を考えればよい.これは既出である.
+\begin{tcolorbox}[colframe=black!80,colback=white,title=最小二乗近似解$_{\text{least squares solution}}$を示す関係式]
+\[
+    A^TA\hat{\symbfit{x}}=A^T\symbfit{b}
+\]
+また,この式を\textbf{正規方程式}$_{\text{normal equations}}$と呼ぶ.
+\end{tcolorbox}
+\subsection{フィッティング}
+ここでは回帰直線,回帰曲線の導出を用いて活用例を紹介する.この2つは数値解析でも用いるが,とくに統計
+的学習に用いられる.統計的学習のなかでは複数の x に対応する y の値から関数を特定することがある.関数を特
+定することで,観測データにはないどんな x に対しても y を出力することが可能だからである.この関数を「モデ
+ル」というが,このモデルの一種に最小2乗近似で関数を推測してその関数をモデル化することがある.図の黄色
+の平面は赤丸の実データから求められたモデルである.
+また,実データをモデルに当てはめることを「フィッティング」という.
+\subsubsection{直線へのフィッテイング}
+\noindent
+\textbf{例題}$\\$
+点 (0,6),(1,0),(2,0) に最も近い直線を求めよ.これらの点が通る直線 $b=C+Dt$ は存在しない.そのため今まで
+のやり方では C,D は求めることができない.
+\[
+    \begin{aligned}
+    b &= C + tD \\
+    6 &= C + 0D \\
+    0 &= C + 1D \\
+    0 &= C + 2D
+    \end{aligned}
+    \quad\Longrightarrow\quad
+    \therefore\;
+    A = \begin{bmatrix}
+        1 & 0 \\
+        1 & 1 \\
+        1 & 2
+    \end{bmatrix},\quad
+    x = \begin{bmatrix}
+        C \\ D
+    \end{bmatrix},\quad
+    \mathbf b = \begin{bmatrix}
+        6 \\ 0 \\ 0
+    \end{bmatrix}.
+\]
+となり,見慣れた形に帰着することができると同時に C,D を求めることが可能となった.
+$A\symbfit{x}=\symbfit{b}$は解を持たない.$\to$最小二乗近似を用いる.\\
+\begin{tabularx}{\linewidth}{XX}
+    $A^TA = 
+    \begin{bmatrix}
+        1 & 1 & 1 \\ 0 & 1 & 2 
+    \end{bmatrix}
+    \begin{bmatrix}
+        1 & 0 \\ 1 & 1 \\ 1 & 2
+    \end{bmatrix}
+    =
+    \begin{bmatrix}
+        3 & 3 \\ 3 & 5
+    \end{bmatrix}$
+    &
+    $A^T\symbfit{b}=
+    \begin{bmatrix}
+        1 & 1 & 1 \\ 0 & 1 & 2 
+    \end{bmatrix}
+    \begin{bmatrix}
+        6 \\ 0 \\ 0
+    \end{bmatrix}
+    =
+    \begin{bmatrix}
+        6 \\ 0
+    \end{bmatrix}$
+\end{tabularx}\\
+\hspace{2cm}$\begin{bmatrix}
+    3 & 3 \\ 3 & 5
+\end{bmatrix}
+\begin{bmatrix}
+    C \\ D
+\end{bmatrix}=
+\begin{bmatrix}
+    6 \\ 0
+\end{bmatrix}
+\qquad
+\hat{\symbfit{x}}=
+\begin{bmatrix}
+    C \\ D
+\end{bmatrix} =
+\begin{bmatrix}
+    5 \\ -3
+\end{bmatrix}$.
+\begin{figure}[H]
+    \centering
+    \includegraphics*[width=0.39\textwidth]{1dimLS.png}
+    \caption{3点と近似直線$y=5-3x$の位置関係}
+\end{figure}
+\paragraph{直線のフィッテイングに関する補足}
+\begin{enumerate}
+    \item 射影の図を見たように,列空間と誤差ベクトル$\symbfit{e}$は直交していた.実際求まった値は同じく直交する.内積をとって確認してみよう.
+    \item 直線のフィッティングに関しては行列は一般化することができる.行列同士の積は計算量が多い.下記に示したように行列の積の結果がわかっているので,先に計算して配列に格納するほうが計算量は小さくすむ.
+\end{enumerate}
+\begin{align*}
+    A^TA=
+    \begin{bmatrix}
+        1 & \dots & 1 \\ t_1 & \dots & t_n
+    \end{bmatrix}
+    \begin{bmatrix}
+        1 & t_1 \\ \vdots & \vdots \\ 1 & t_n
+    \end{bmatrix}
+    &=
+    \begin{bmatrix}
+        n & \sum t_i \\ \sum t_i & \sum t_i^2
+    \end{bmatrix} \\
+    A^T\symbfit{b} =
+    \begin{bmatrix}
+        1 & \dots & 1 \\ t_1 & \dots & t_n
+    \end{bmatrix}
+    \begin{bmatrix}
+        b_1 \\ \vdots \\ b_n
+    \end{bmatrix} 
+    &=
+    \begin{bmatrix}
+        \sum b_i \\ \sum t_i b_i
+    \end{bmatrix}
+\end{align*}
+※↓計算量がわかる方へ (知ってから再度読んでも可)
+\begin{framed}
+    例えば n 次正方行列同士の積 AB の計算量は$O(n^3)$である.\\
+    $n,\;\sum t_i,\;\sum t_i^2,\; \sum b_i,\;\sum t_ib_i$はいずれも$O(n)$で計算可能である.つまり,各和を計算して配列に格納する手段をとれば,
+    $A^TA,\;A^T\symbfit{b}$は実質$O(n)$で計算可能である.
+\end{framed}
+\subsubsection{放物線へのフィッテイング}
+放物線になっても解き方は変わらない.ここでは,係数が行列に変わるところだけ示してお終いにする.
+\[
+\begin{aligned}
+    C+Dt_1+Et^2_2=b_1 \\
+    \vdots \hspace{2cm} \\
+    C+Dt_n+Et^2_n=b_n \\
+\end{aligned}
+\qquad\text{に対する}n\times3\text{行列}
+\begin{bmatrix}
+    1 & t_1 & t^2_1 \\ \vdots & \vdots & \vdots \\ 1 & t_n & t_n^2
+\end{bmatrix}
+\]
+関数の次数が増えるほど行列は横に長くなる.データ数が多いほど行列は縦に長くなる.\\
+また,解がある$A\symbfit{x}=\symbfit{b}$においてこの手法を用いるのも悪い手ではない.単純に誤差が零となるだけである.
+\subsection{言葉の由来と誤差と呼ぶ理由}
+こまで説明をすると,なぜ「誤差$_{\text{error}}$」と呼ぶか気づいた人もいるのではないか？数値誤差を意味する.実データ
+を元に最小二乗法を適用すると,真の解との差（誤差）が生じることがある.関数とは,入力に対して出力を生
+成する機械のようなものであり,自然言語処理においても,与えられた入力から最適な返答を導き出すという点で
+一種の関数と言える.しかし,実際にはわずかにずれた返答をすることがあるだろう.これは,ユーザーが行うす
+べての質問をあらかじめ記録しておくことができないため,一度モデル化した関数を用いて「おおよそ適切な」返
+答を生成しているからである.この返答の違和感やずれこそが,言わば誤差の正体と言えるだろう.
+次に「最小二乗近似」という名称の由来について説明する.「最小」は誤差の和を最小化することを指し,「二乗」
+は分散の理論に基づいている.値を二乗することで正負の符号にかかわらずすべて正の値に変換でき,もとの誤差
+の大小関係もそのまま保たれる.したがって,二乗誤差が最小となるモデルは,もとの誤差についても最小となる
+ことが保証されるのである.
+もし私が現在の知識で物理学実験のレポートを作成するのであれば,最小二乗近似を用いた考察をするだろう.例
+えば運動エネルギーの測定結果は運動エネルギーの式に従うはずである.モデル$K=av^2+b$として,最小二乗
+近似を考えると,$a\to\frac{1}{2}m,\;b\to0$に近づくはずである.\\
+しかし,測定値からではそんな理想的になることはほぼない.なぜだろうか？なぜならなかったのだろうか？
+
+\noindent
+\textbf{(2bの範囲)}
+\section{対角化}\label{sec:diagonalization}
+線形代数学 (2b) では行列を固有値を用いて,対角化$_{\text{diagonalization}}$を行う.最後は行列の冪乗を計算する流れとなっている.
+対角化するメリットは (発展) で詳しく説明しようとは思うが,テスト内容の都合,その1つを挙げ,それに従って
+内容を展開していく.
+\subsection{対角化の意味}
+行列同士は積で計算することが可能である.となると,逆が可能である.1つの行列を2つの行列の積で表現し
+たり,3つの行列で表現できたり可能であることを意味する.行列を複数に分けると,情報量が増えて良いことが無
+いように感じるかもしれない.しかし,計算処理においては優位であることがある.対角化もその一種である.実
+感することになるだろう.
+優位な分解の1つに構成する行列の1つを「対角行列$_{\text{diagonal matrix}}$」にする手法がある.これをいわゆる「対角化」という.\\
+※厳密には元の行列と相似である対角行列に変形することを言う.\\\hspace{7cm}(行列の相似は割愛するため触れない書き方をしている.)
+\subsection{固有ベクトル行列と対角行列の積で表現する}
+固有ベクトル行列$S$は固有値ベクトルからなる行列のことを言う.そしてもう1つ「固有値」というものがある.
+ここでは固有値を要素ともつ対角行列を$\Lambda$とする.
+固有値も固有ベクトルもまだ学習していない内容なので,知らなくて当然である.しかし,その2つの意味と用い
+る理由を説明するには長い説明文を要する.そこで,これらの説明は簡単に済ませ,先に対角化による行列の結果を先に示す.その方が理解しやすいと考えたからだ.\\
+
+行列$A$に対して$A\symbfit{x}=\lambda\symbfit{x}$が成り立つ\textbf{ベクトル}$\symbfit{x}$と\textbf{値}$\lambda$が存在する.「行列の要素が異なれば2つは異なる」というのは感覚的にわかるだろう.つまり,行列によって異なる.行列"\textbf{固有}"のベクトル,値であるということだ.この行列によって異なる2つをベクトルは\textbf{固有ベクトル},値を\textbf{固有値}という.
+\begin{tcolorbox}[colframe=black!80,colback=white,title=対角化の導出]
+    $n\times n$行列$A$がn個の固有ベクトル$\symbfit{x}_1,\;\symbfit{x}_2,\;\dots,\;\symbfit{x}_n$を持つと仮定する.\\
+    それらを固有ベクトル行列$S$の列ベクトルとする.またそれに対応する固有値を$\lambda_1,\;\lambda_2,\;\dots,\;\lambda_n$とする.\\
+    また,固有値と固有ベクトルにおいて
+    \[\mathbf{A}\,\mathbf{x}_i = \lambda_i\,\mathbf{x}_i\quad\text{が成り立つ}\quad(\lambda_i\text{ はスカラー倍})\]
+    このとき$A$と$S$の積を考える.
+    \begin{align*}
+        AS = A
+        \begin{bmatrix}
+            && \\ \:\symbfit{x}_1 & \dots &  \symbfit{x}_n\: \\ &&
+        \end{bmatrix}
+        &=
+                \begin{bmatrix}
+            && \\ \:\lambda_1\symbfit{x}_1 & \dots &  \lambda_n\symbfit{x}_n\: \\ &&
+        \end{bmatrix} \\
+        &=\begin{bmatrix}
+            && \\ \:\symbfit{x}_1 & \dots &  \symbfit{x}_n\: \\ &&
+        \end{bmatrix}
+        \begin{bmatrix}
+            \lambda_1 & & \\ & \ddots & \\ && \lambda_n
+        \end{bmatrix}=S\Lambda
+    \end{align*}
+    $S$は逆行列をもつ(証明割愛)ので,
+    \[
+    \mathbf{A=SΛS^{-1}}
+    \]
+\end{tcolorbox}
+この$A = S\Lambda S^{-1}$が今回の対角化のゴールである.わかるとおり,固有値と固有ベクトルが重要である.これか
+ら固有値と固有ベクトルとは何なのかについて説明し,再び対角化に帰着する.
+\subsection{固有値と固有ベクトル}
+行列の積において,基本的にかけられるとその要素は全く別物になってしまう.つまり,$AB=C$である.かけら
+れる行列$B$もしくは列ベクトルは$A$によらず,なんでもいい.しかし,そのペアによっては出力される要素が変
+わらない.もしくは,すべての要素が係数倍になるだけとなる行列が存在してもおかしくはない話ではある.つまり,$AB=B$もしくは$AB=kB(k\text{は係数})$ということである.
+
+行列 A について考える.行列 A にとある列ベクトルをかけるとする.出力は列ベクトルと同じサイズになるだろ
+う.注目するのはその出力される列ベクトルの要素である.このとき,かけられた列ベクトルの係数倍となったら
+どうだろう？かけられる列ベクトルを$\symbfit{x}$,スカラー倍を$\lambda$と表現すると,
+\begin{framed}
+    \[A\symbfit{x}=\lambda\symbfit{x}\]
+\end{framed}
+と言うことになる.このとき,この2つには名前がついている.$A$にとって$\lambda$を「\textbf{固有値}$_{\text{eigenvalue}}$」と呼び,$\symbfit{x}$を「\textbf{固有ベクトル}$_{\text{eigenvector}}$
+」と呼ぶ.特別なベクトル$\symbfit{x}$に対して,$A$をかけるとこで,$\symbfit{x}$が伸びたり,縮んだり反転したりする.
+不思議な関係だと私は感じる.今まで行列の関係では$A$は施される側であった.しかし,これはとあるベクトルに
+$A$を施す.このとき,結果が上記の関係式を満たすときには,$A$にとっては特別なベクトルとなる.$A$が能動的と
+なる特殊な関係式だと感じている.\\
+おさえて欲しい感覚は
+\begin{center}
+    \textbf{各行列はそれぞれ固有の「固有値」と「固有ベクトル」を持つ.\\行列の要素を1つでも変更すると,これらはともに変化する.}
+\end{center}
+実際に例を挙げよう. \vspace{2mm}\\
+$A=\begin{bmatrix}0.8 & 0.3 \\ 0.2 & 0.7\end{bmatrix}$における固有値と固有ベクトルはそれぞれ$\displaystyle \lambda_1=1,\;\symbfit{x}_1=\begin{bmatrix}0.6\\0.4\end{bmatrix}\quad\lambda_1=\frac{1}{2},\;\symbfit{x}_1=\begin{bmatrix}1\\-1\end{bmatrix}$である.\\[6pt]
+本当か確認する.
+\begin{align*}
+    \displaystyle
+    \symbfit{x}_1 = \begin{bmatrix}0.6\\0.4\end{bmatrix} \:&\text{と}\: A\symbfit{x}_1=\begin{bmatrix}0.8 & 0.3 \\ 0.2 & 0.7\end{bmatrix}\begin{bmatrix}0.6\\0.4\end{bmatrix} = \begin{bmatrix}0.6\\0.4\end{bmatrix} \qquad \therefore A\symbfit{x}_1=1\symbfit{x}_1 \\[4pt]
+    \symbfit{x}_2 = \begin{bmatrix}1\\-1\end{bmatrix} \:&\text{と}\: A\symbfit{x}_2=\begin{bmatrix}0.8 & 0.3 \\ 0.2 & 0.7\end{bmatrix}\begin{bmatrix}1\\-1\end{bmatrix} = \begin{bmatrix}0.5\\-0.5\end{bmatrix} \qquad \therefore A\symbfit{x}_2=\frac{1}{2}\symbfit{x}_1 \\
+\end{align*}
+確かに成り立つことがわかった.
+\subsection{(重要)固有値と固有ベクトルの求め方}
+固有値と固有ベクトルの解き方について説明する.解くには\underline{とある行列式を利用すればよい}のだが,なぜそれで
+求まるかまで順に説明していく.\\
+行列 A に対する固有値と固有ベクトルには$A\symbfit{x}=\lambda\symbfit{x}$が成り立っていた.これを解くためにそこから以下のような
+ステップを踏む.※上記の式を「固有値問題の式」と以降呼ぶ.
+\begin{align*}
+    A\symbfit{x} &=\lambda\symbfit{x}\\
+    (A-\lambda I)\symbfit{x}&=\symbfit{0}
+\end{align*}
+ポイントは$A-\lambda I$である.行列同士の引き算の結果が行列であるなら,行列 A に
+対して引く λ は行列でなければいけないが,実際は固有値という"値"である.前期の発展内容で説明したように「単位行列」はいくらか
+けても計算結果を変えない.値に単位行列をかけているかたちにすることで,値を保ちつつ,"行列"sに変身することができ
+る.これによって固有値問題の式を崩さずに,行列$A-\lambda I$を作成することに成功した.\\
+$\symbfit{x}$が非自明解をもつには,方程式$A-\lambda I$が逆行列をもたない必要がある.\\
+$B=A-\lambda I$とすると,$B^{-1}B\symbfit{x}=B^{-1}\symbfit{0}\leftrightarrow\symbfit{x}=\symbfit{0}$となり,非自明解という条件が満たせない.\\
+逆行列を持たない条件は行列式が0であったので,$\det(A-\lambda I)=0$を満たす必要がある.\\
+つまり,$\det(A-\lambda I)=0$を解くことは固有値を求めることとなる.\\
+※非自明解$\cdots A\symbfit{x}=\symbfit{0}$の解のうち,ゼロベクトル以外の解を指す.
+※$B$において逆行列の話が出ることから,固有値や固有ベクトルを求める対象である行列$A$は正方行列だとわかる.
+\hypertarget{eig}{}
+\begin{tcolorbox}[colframe=black!80,colback=white,title=固有多項式$g_{A}(\lambda)$]
+    行列$A$においてその固有値を求めるときは,$\det(A-\lambda I)=0$満たす,$\lambda$を求める.その値がAにおける\textbf{固有値}であり,
+    $\det(A-\lambda I)$を固有多項式$g_{A}(\lambda)$と表す.\\
+    ※授業では恐らく t を用いているため,$g_A(t) = \det(A - tI)$で教わるかもしれないが,変数は参考文献に倣っている.
+\end{tcolorbox}
+実際に求めてみよう.
+\begin{framed}
+A=
+$\begin{bmatrix}
+    2 & -1 \\
+    -1 & 2
+\end{bmatrix}$
+の固有値と固有ベクトルを求めよ.
+\end{framed}
+固有値を求めるために,固有多項式を用いる.
+\begin{align*}
+    g_A(\lambda)&=\det
+    \begin{bmatrix}
+        2-\lambda & -1 \\ -1 & 2-\lambda
+    \end{bmatrix}\\
+    &=(\lambda -1)(\lambda-3)=0 \qquad \therefore \lambda=1,3
+\end{align*}
+これで固有値が求まった.このまま固有ベクトルの求め方に入る.
+固有ベクトルは固有値問題の式を見るように,固有値によって,対応する固有ベクトルが存在する.つまり,固有値によって場合分けが必要である.\\
+固有ベクトルを求めるのにつかう式は$(A-\lambda I)\symbfit{x}=\symbfit{0}$である.
+\paragraph{$\lambda=1$のとき}$\\$
+$\lambda=1$より
+\begin{align*}
+    (A- 1 \cdot I)\symbfit{x} &= \symbfit{0} \\
+    \begin{bmatrix}
+        2-1 & -1 \\ -1 & 2-1
+    \end{bmatrix}\symbfit{x}&=\symbfit{0}\\
+        \begin{bmatrix}
+        1 & -1 \\ -1 & 1
+    \end{bmatrix}\symbfit{x}&=\symbfit{0}
+\end{align*}
+あとはいつも通りとけば良い.固有式を求めるときはどうしても,rankの退化が起こる.つまり
+\[    
+\begin{bmatrix}
+        1 & -1 \\ 0 & 0
+    \end{bmatrix}\symbfit{x}=\symbfit{0} \hspace{0.5cm}\rightarrow \hspace{0.5cm}
+    \begin{cases*}
+        x - y = 0 \\
+        y = t
+    \end{cases*} \hspace{0.5cm}\rightarrow \hspace{0.5cm}
+    \symbfit{x}=t
+    \underline{
+    \begin{bmatrix}
+        1 \\ 1
+    \end{bmatrix}}
+\]
+このアンダーラインが引かれた行列が固有ベクトルである.$\lambda=3$のときも同様に求められる.検証してみよう.
+$\begin{bmatrix}
+    1 \\ -1
+\end{bmatrix}$と求まれば正解である.\\
+※厳密には$\symbfit{x}$が固有ベクトルなので,t倍のベクトルすべてが固有ベクトルとなる.テストでは要素が整数となる最小のベクトルが答えとして求めるよう指示されていた.
+\subsection{(重要)対角化への帰宅とk乗計算}
+おかえりなさい.固有値と固有ベクトルを知った今対角化自体について言及することは少ない.
+実際に行列を用いて対角化の結果を見せる.自力で求めてみよう
+\begin{framed}
+\[
+    \begin{bmatrix}
+        1 & 5 \\ 0 & 6
+    \end{bmatrix}=
+    \begin{bmatrix}
+        1 & 1 \\ 0 & 1
+    \end{bmatrix}
+    \begin{bmatrix}
+        1 & \\ & 6\\
+    \end{bmatrix}
+    \begin{bmatrix}
+        1 & -1  \\ 0 & 1
+    \end{bmatrix}
+\]
+\end{framed}
+
+テストにおいて対角化に向けて固有ベクトルを求めるのだが,そのときに固有ベクトルに対して\textbf{正規化}を行う.
+不思議なことに,正規化を行なった固有ベクトルからなる行列Qは以下の法則が成り立つ.
+\begin{tcolorbox}[colframe=black!80,colback=white,title=直交行列Qと対角化]
+    直交行列において$Q^{-1}=Q^T$が成り立つので,
+\[
+    A = Q\Lambda Q^T 
+\]
+が成り立つ.
+\end{tcolorbox}
+これにより,逆行列を求める工程が不要になる.あやふやな内容は全て(発展)Section.\ref{sec:spectral}で紹介している.\bigskip\\
+
+さて対角化によってどんなメリットがあるのだろうか？その1つとして冪乗計算の高速性が挙げられる.
+行列の積を繰り返し計算する冪乗は計算量が多く,効率性が求められる.ましてや人間の暗算や手計算では到底扱える代物ではない.
+しかしこの対角化は可能にしうる.以下の計算を見てほしい.
+\begin{tcolorbox}[colframe=black!80,colback=white,title=Aのk乗行列]
+\begin{align*}   
+A^k&=Q\Lambda Q^T\cdot Q\Lambda Q^T\cdots Q\Lambda Q^T\\
+&\text{$Q^TQ=I\;(Q^{-1}=Q^T)$より}\\
+&=Q\Lambda^k Q^T
+\end{align*}
+ただし,$\Lambda$は対角行列
+\end{tcolorbox}
+つまり,
+\[
+    \begin{bmatrix}
+        1 & 5 \\ 0 & 6
+    \end{bmatrix}^k=
+    \begin{bmatrix}
+        1 & 1 \\ 0 & 1
+    \end{bmatrix}
+    \begin{bmatrix}
+        1^k & \\ & 6^k\\
+    \end{bmatrix}
+    \begin{bmatrix}
+        1 & -1  \\ 0 & 1
+    \end{bmatrix}
+\]
+が成り立つ.\\
+※冪乗のkは決して自然数であるという制限はない.\textbf{$\mathbf{-1}$であれば,素早く逆行列を求めることが可能となる.}\\
+※逆行列を求めるときは$\Lambda$の対角成分に0があっては不可能.(分母)\;=\;0となってしまう.\\
+これは考察だが,0がある場合は,正則ではないのではないか？ \bigskip\\
+\noindent
+以下
+$    \begin{bmatrix}
+        1 & \\ & 6\\
+    \end{bmatrix}^k=
+    \begin{bmatrix}
+        1^k & \\ & 6^k\\
+    \end{bmatrix}$が理解できない人向けの説明
+\begin{framed}
+    
+    例えば
+$\begin{bmatrix}
+    1 & \\ & 6
+\end{bmatrix}\cdot A$の計算を考える.$\bigg(
+    A=
+    \begin{bmatrix}
+        1 & \\ & 6
+    \end{bmatrix}
+\bigg)$\\
+Aの第1列のすべての要素に1が掛けられる.出力される行列の第1列は$1^2,0,0,\cdots$となる.同様に第2列も考えられる.
+つまり,対角行列の冪乗は対角要素が冪乗されるのである.\\
+\end{framed}
+\subsection{(発展)固有値の積と和}
+固有値に関する補足知識である.固有値と行列におけるおもしろい関係を紹介する.これは固有値のよい検算として使えるだろう.
+\begin{tcolorbox}[colframe=black!80,colback=white,title=行列式と要素に現れる固有値のヒント]
+\begin{itemize}
+    \item n個の固有値の積は行列式に等しい
+    \item n個の固有値の和はn個の対角要素の和に等しい(「Aのトレース」という)
+\end{itemize}
+\end{tcolorbox}
+\noindent
+固有値が2つであることが,既知である場合は連立方程式で求めることが可能ということでもある.
+\section{(発展)テストにおいて出題される行列の正体}
+\label{sec:spectral}
+テストにおいて出題される行列は対角化と冪乗をするが,全ての行列がそう上手くいかない.出題される行列は意図的に,諸定理や性質が成り立つものを選んでいる.
+それがどのような行列で,どのような性質が成り立つのか？なぜ成り立つのかを追うと,とても多くの知識を得ることができる.ここでは順に学んでいこうと思う.
+\hypertarget{parametric}{}
+\subsection{対角化可能条件}
+テストにおいては対角化を問われるので,もちろん対角化可能な行列が出題される.対角化できないことは考える必要はない.しかし,自分が用意した行列を対角化したいときは必要な知識である.
+ここでは必ず対角可能となる条件を述べる.下記の条件を満たさなくてもまぐれでできてしまうこともある.
+\begin{tcolorbox}[colframe=black!80,colback=white,title=対角可能条件]
+\begin{itemize}
+    \item 固有値がすべて異なる場合,固有ベクトルは線形独立である.\\
+     n個の異なる固有値を持つn次正方行列は必ず対角化可能である.
+    \item (重要)\textbf{行列の要素が実数かつ対称である「実対称行列」は必ず対角化可能である.}
+\end{itemize}
+\end{tcolorbox}
+※証明はストラングの書籍\cite{strang}で行っているが読んでいないので紹介しない(できない).
+\subsection{直交行列$Q$の導入}
+まず,行列の各列ベクトルが直交するかの確認は,すでに互いに内積をとって0か調べる手段ならお教えしている.
+しかし,このやり方は効率よくないし,プログラムにおいてはコンビネーションをとるので冗長なアルゴリズムとなる.
+わかりやすいように,ここではノルムが1($\|\symbfit{a}\|^2=\symbfit{a}^T\symbfit{a}=1$)で互いが直交である列ベクトルからなる行列で考える.\\
+シンプルに3つの列ベクトルからなる行列で考え,計算結果によって求まる行列をBとすると,
+\begin{verbatim}
+    for(i=0;i<3;i++){
+        for(j=0;j<3;j++){
+            if(i == j) {
+                自身同士の内積→ノルムなので1
+                計算結果はBの対角要素にくる
+            }
+            else {
+                互いに直交するので,内積は0
+                計算結果はBの対角要素以外にくる
+            }
+        }
+    }
+\end{verbatim}
+つまり,
+\begin{tcolorbox}[colframe=black!80,colback=white,title=出力する行列が対角行列である意味]
+正規直交ベクトル(「正規」はノルムが1を意味する)からなる行列Qにおいて,
+\[
+Q^TQ=I\]
+が成り立つ.(直交かつノルムが1のベクトルからなる行列を「\textbf{直交行列}」と呼ぶ)\\
+また,正規でなくても直交ベクトルの場合,
+\[
+A^T A=D \qquad(Dは\text{対角行列であり,}D=\mathrm{diag}(\|\mathbf a_1\|^2,\dots,\|\mathbf a_n\|^2)\geq 0)\]
+\end{tcolorbox}
+\noindent
+ノルムが対角要素にくるので,ノルムが1なら,単位行列になる.ノルムが1でない場合は対角行列になるが,
+列ベクトル同士が直交しているという事実は変わらない.\\
+ここでこの話をしたのは,これから話す内容の証明に用いるからである.
+\subsection{実対称行列$A$において,$A\symbfit{x}=λ\symbfit{x}$が持つ特別な性質}
+ここでは実対称行列$A$にフォーカスして,実対称行列に成り立つ特別な性質を見てみよう.実対称行列は対称なので,$A=A^T$ を満たす.このとき，固有値が異なる固有ベクトルは必ず直交する.証明する.
+\[\begin{cases}
+A\symbfit{x}_i=\lambda_i\symbfit{x}_i\\
+A\symbfit{x}_j=\lambda_j\symbfit{x}_j
+\end{cases}\]
+とすると
+\begin{align*}
+\symbfit{x}_i^TA\symbfit{x}_j&=\lambda_j\,\symbfit{x}_i^T\symbfit{x}_j \quad (\text{両辺に}\;\symbfit{x}_i^T\,)\\
+\symbfit{x}_i^TA^T\symbfit{x}_j&=\lambda_j\,\symbfit{x}_i^T\symbfit{x}_j \quad(A=A^T\,)\\
+ (A\symbfit{x}_i)^T\symbfit{x}_j&=\lambda_i\,\symbfit{x}_i^T\symbfit{x}_j\\
+ (\lambda_i\symbfit{x}_i)^T\symbfit{x}_j&=\lambda_i\,\symbfit{x}_i^T\symbfit{x}_j\\
+(\lambda_i-\lambda_j)\,\symbfit{x}_i^T\symbfit{x}_j&=0\\
+\end{align*}
+したがって $\lambda_i\neq\lambda_j$ なら $\symbfit{x}_i^T\symbfit{x}_j=0$（直交）.つまり,実対称行列においては固有ベクトルは\textbf{互いに直交している}ことがわかる.
+つまり,この固有ベクトルはすでに直交しているので,正規化すると正規直交な固有ベクトルを列にもつ直交行列 $Q$（$Q^TQ=I$）が作れてしまう.また,$Q^TQ=I$は$Q^{-1}Q=I$より$Q^T=Q^{-1}$が成り立つ(直交行列の重要性質).
+これらをまとめたのが以下の定理である.
+\begin{tcolorbox}[colframe=black!80,colback=white,title=スペクトル定理$_{\text{spectral theorem}}$(主軸定理)]
+    すべての実対称行列$_{\text{real symmetric matrix}}$は,実数固有値からなる$\Lambda$と正規直交する固有ベクトルからなる行列$Q$を用いて,$A=Q\Lambda Q^T$と分解される.：
+    \begin{center}
+        \textbf{実対称行列の対角化}$\qquad A=Q\Lambda Q^{-1}=Q\Lambda Q^T$ただし,$Q^{-1}=Q^T$
+    \end{center}
+\end{tcolorbox}
+\noindent
+※幾何や物理では「主軸定理」と呼ぶ\\
+※前期の内容がつながる\textbf{「ピボット積＝行列式(行の変換無し)＝固有値の積」}\\
+\hspace{1em}
+スペクトルの定理は実対称行列の固有ベクトルが直交しているという性質から,私たちが正規化することで,$Q\Lambda Q^T$とすることができるという内容である.
+\hyperlink{parametric}{対角化可能条件}では実対称行列は対角化可能とあった.このスペクトルの定理はこの条件に通ずるところがある.スペクトルの定理によって,
+実対称行列が行列の冪乗をするにおいて,最適な行列であることを示している.
+一応$Q\Lambda Q^T$が実対称行列であることを確認してみよう.
+\[
+   A^T\text{(転置をとる)} =(Q\Lambda Q^T)^T = (Q^T)^T \Lambda^T Q^T=Q\Lambda Q^T = A\text{(元に戻る)}
+\]
+証明完了
+\subsection{テストで出題される行列は実対称行列！！}
+テストでは対角化が出題されるため,対角化が可能な行列であることが前提である.加えて,冪乗計算の結果も出題される.今までの内容から考えるに,(実対称行列にフォーカスした時点で気づいてしまったかもしれないが)出題される行列は
+実対称行列であることが相応しい.\\問題の構成は「対角化$\to$冪乗」である.解法の流れと同時にこれまでの内容を復習しよう.
+\begin{framed}
+\begin{enumerate}
+    \item 問「行列を対角化せよ.」(実対称行列が出題されるため,必ず\hyperlink{parametric}{対角化可能})
+    \item \hyperlink{eig}{固有多項式}を用いて,固有値とそれによって求まる固有ベクトルを計算する.\\(実対称行列なので,自動的に固有ベクトルは互いに直交)
+    \item 固有ベクトルの正規化を行う.\\(正規化により,正規直交ベクトルとなり,それらを列ベクトルとする行列は上記での行列Qとなる)
+    \item $A=Q\Lambda Q^T$の完成\;(知らない人は,なぜ正規化をしているかすらわからない)
+    \item 問「$A^n$を計算せよ」
+    \item 行列$\Lambda$の対角要素と,正規化によって出現する値をn乗して完成.\\(知らない人は,暗記で突破する羽目になる)
+\end{enumerate}
+\end{framed}
+これでわかる通り,対角化と冪乗の関係は特別な行列にのみ自然な流れで解くことができる.(重要)の内容ではそれについて一切説明していない.
+これはあくまで,テスト範囲に特化しているためである.ここまで読んだ読者はそのことに注意すること.
+\subsection{正定値(対称)行列の判別方法}
+全ての固有値が正の対称行列を「\textbf{正定値行列}$_{\text{positive definite matrix}}$」と呼ぶ.
+\begin{tcolorbox}[colframe=black!80,colback=white,title=正定値行列で互いに成り立つ5つの性質]
+\textbf{実対称行列が以下の4つの性質のどれかを満たすとき,その行列は以下のすべてを満たす:}
+    \begin{enumerate}
+    \item n個の固有値がすべて正である.
+    \item n個のピボットが全て正である.
+    \item n個の左上行列式がすべて正である.
+    \item $\symbfit{x}=\symbfit{0}$を除いて,$\symbfit{x}^TA\symbfit{x}$が正である.
+    \item 列が\textbf{独立な}行列Rが存在して,Aが$R^TR$に等しい.
+\end{enumerate}
+\end{tcolorbox}
+説明が必要なのは3,4,5だと思う.\\
+\textbf{3.}\\
+「左上行列式」とは$1\times1,2\times2,\cdots,n\times n$である.行列の左上から行列式を計算する範囲を広げていく.
+左上行列式の結果がすべて正の値になるという意味である.\\
+※左上行列式は一般的な名称でないことがわかった.正式には「主座小行列式$_{\text{leading principal minor}}$」と呼ぶらしい.\\
+参照：\url{https://www.dr-eriksen.no/teaching/GRA6035/2010/lecture5.pdf}\\
+\textbf{4.}\\
+$A\symbfit{x}=\lambda\symbfit{x}$に対して,$\symbfit{x}^T$をかけると
+$\symbfit{x}^TA\symbfit{x}=\lambda\symbfit{x}^T\symbfit{x}=\lambda\|\symbfit{x}\|^2>0\qquad(\forall_{\lambda_i} > 0)$\\
+\hypertarget{cholesky}{}
+\textbf{5.}\\
+正定値行列は独立な列からなる$R$を用いて,$A=R^T R$と分解することができる.\\
+これを「コレスキー分解$_{\text{cholesky decomposition}}$」という.\\※「数値解析」で扱う.発展で例がある.
+
+\begin{framed}
+\textbf{応用線形代数学の内容}\\
+4.について,さらに進んだ説明をしてみようと思う.$A\symbfit{x}=\lambda\symbfit{x}$での証明であったために,$\symbfit{x}$に当たるベクトルは固有ベクトルのみかと思ったかもしれない.
+しかし,正しくは$\symbfit{x}=\mathbf{0}$を除いた全てのベクトルである.\\
+以下の\textbf{2次形式}という書き方を用いるとわかる.\hyperlink{parametric}{対角化可能条件}に基づいて,$A=\begin{bmatrix}
+    2 & -1 \\ -1 & 2
+\end{bmatrix}$とすると,
+\begin{align*}
+\symbfit{x}^TA\symbfit{x}=
+\begin{bmatrix}
+    x_1 & x_2
+\end{bmatrix}
+\begin{bmatrix}
+    2 & -1 \\ -1 & 2
+\end{bmatrix}
+\begin{bmatrix}
+    x_1 \\ x_2
+\end{bmatrix}
+&=2x_1^2-2x_1x_2+2x^2_2 \\
+&=2\left(x_1-\frac{1}{2}x_2\right)^2+\frac{3}{2}x_2^2 \;(\;> 0)\qquad(\symbfit{x}=\mathbf{0}は除外)\\
+&\therefore\; \symbfit{x}^TA\symbfit{x} > 0
+\end{align*}
+これにより正定値であることが証明されたと同時に,対角可能な行列であることが示された.\\
+対角化における各要素の配置の理由は割愛するが,平方完成によって出現する係数から,素早く対角化ができる.
+\[
+A=LDL^T=
+\begin{bmatrix}1 & \\ -\frac{1}{2} & 1\end{bmatrix}
+\begin{bmatrix}2 & \\ & \frac{3}{2}\end{bmatrix}
+\begin{bmatrix}1 & -\frac{1}{2} \\ & 1\end{bmatrix}
+\]
+さらに正定値行列は\hyperlink{cholesky}{コレスキー分解}$chol(A)=R^TR$が可能である.
+\[
+A=LDL^T=L\sqrt{D}\sqrt{D}L^T=(\sqrt{D}L^T)^T\sqrt{D}L^T=R^TR \qquad \therefore\; R=\sqrt{D}L^T
+\]
+\[
+R=\sqrt{D}L^T=
+\begin{bmatrix}\sqrt{2} & \\ & \sqrt{\frac{3}{2}}\end{bmatrix}
+\begin{bmatrix}1 & -\frac{1}{2} \\ & 1\end{bmatrix}
+=
+\begin{bmatrix}\sqrt{2} & \frac{1}{\sqrt{2}} \\ 0 & \sqrt{\frac{3}{2}}\end{bmatrix}
+\]
+\[
+chol(A)=
+\begin{bmatrix}1.4142 &  \\ 0.7071 & 1.225\end{bmatrix}
+\begin{bmatrix}1.4142 & 0.7071 \\ & 1.225\end{bmatrix}
+\]
+\end{framed}
+\section{(発展)Gram--SchmidtのアルゴリズムとQR分解}\label{sec:GS_ALG}
+\subsection{理論からアルゴリズムへ}
+このセクションではSection.\ref{sec:gram}を実装を考え、アルゴリズムの側面から考えていこう.ここでは2つのアルゴリズムを紹介する.
+\begin{itemize}
+    \item Classical Gram--Schmidt Algorithm(CSG法)
+    \item Modified Gram--Schmidt Algorithm(MGS法)
+\end{itemize}
+Strang本$^{\cite{strang},\cite{physics}}$ではMGS法を「修正グラム--シュミット法」と紹介されていたが、この本だけかもしれないので、英語名で紹介する.
+最初にCSG法が開発された.これは丸め誤差の影響を受ける不安定なアルゴリズムである.そこで、後に改良版のMGS法が作られた.MGS法とCSG法では理論的な計算は完全に一致するが、計算する順番を変えることで安定性を得る.CSG法から説明した方が理解しやすいため順番に紹介していく.
+
+\subsection{MGS法とCGS法}
+\subsubsection{CGS法の実装}
+正規化前のベクトルを$\symbfit{v}_j$とする.つまり、
+$
+    \symbfit{q}_j = \dfrac{\symbfit{v}_j}{|\symbfit{v}_j|}
+$である.Section.\ref{sec:gram}で紹介したアルゴリズムでは$A,B,C,a,b,c$を用いていたが、より一般化するために、($a,b,c$)を($a_1,a_2,a_3$)とし($A,B,C$)を($v_1,v_2,v_3$)で拡張可能にする.
+そうすると、$j$番目のベクトルである$\symbfit{v}_j$は
+\begin{equation}
+    \symbfit{v}_j = \symbfit{a}_j - \sum_{i=1}^{j-1}(\symbfit{q}_i^T\symbfit{a}_j)\symbfit{q}_i \label{eq:CGS_loop}
+\end{equation}
+この式(\ref{eq:CGS_loop})がCGS法の根幹となる.各ベクトルに対して、$(\symbfit{q}_i^T\symbfit{a}_j)\symbfit{q}_i$を\verb|for|文で減算し続けて、作られた$\symbfit{v}_j$を最後に自身のノルムで正規化する.
+となるだろう.実際にアルゴリズムを見てみよう.表記方法はTrefethen \& Bau$^{\cite{Trefethen-Bau}}$を参考にする.
+\begin{tcolorbox}[colframe=black!80,colback=white,title=Claasical Gram--Schmidt Algorithm (unstable)]
+\begin{minipage}[t]{0.34\textwidth}
+\begin{table}[H]\centering
+    \begin{tabular}{l}
+        \textbf{for} $j=1$ \textbf{to} $n$\\
+        \hspace{0.8cm} $\symbfit{v}_j=\symbfit{a}_j$\\
+        \hspace{0.8cm} \textbf{for} $i=1$ \textbf{to} $j-1$\\
+        \hspace{1.6cm} $r_{ij}=\symbfit{q}^T_i\symbfit{a}_j$\\
+        \hspace{1.6cm} $\symbfit{v}_j=\symbfit{v}_j - r_{ij}\symbfit{q}_i$\\
+        \hspace{0.8cm} $r_{jj}=\|\symbfit{v}_j\|_2$\\
+        \hspace{0.8cm} $\symbfit{q}_j = \symbfit{v}_j/r_{jj}$
+    \end{tabular}
+\end{table}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.65\textwidth}
+    \bigskip
+    \begin{tabular}[H]{|l}
+        CGS法 \\
+        $\symbfit{a}_j$は3行目で使うため、$\symbfit{v}_j$に結果を反映させる \\
+        式(\ref{eq:I_qq_all})での$\Sigma$の計算をおこなうfor文($j=1$ではスキップ)\\
+        $\symbfit{r}_{ij}=\symbfit{q}_i^T\symbfit{a}_j$を計算する\\
+        $\symbfit{a}_j - (\symbfit{q}_i^T\symbfit{a}_j)\symbfit{q}_i$.$\symbfit{a}_j$に減算したら、$\symbfit{a}_j$の値が変わってしまう\\
+        $\symbfit{v}_j$の要素の二乗和を計算\\
+        $\symbfit{v}_j$を正規化して,$\symbfit{q}_j$とする
+    \end{tabular}
+    \bigskip
+\end{minipage}
+\end{tcolorbox}
+これによってCGS法によって正規直交化は実現する。このアルゴリムはこれまでによって導出された式を素直にプログラムに落とし込んだ形をしているため、コードの理解がしやすい。
+しかし、先ほど説明したように、不安定であるため、MGS法で実装する方が好ましい。
+\subsubsection{MGS法の実装}
+MGS法までには、式(\ref{eq:I_qq_all})の式変形から実現できる。サイズに注意しながら$\Sigma$の中のベクトルは入れ替えることで、
+\begin{align}
+    \symbfit{v}_j &= \symbfit{a}_j - \sum_{i=1}^{j-1}(\symbfit{q}_i^T\symbfit{a}_j)\symbfit{q}_i \notag\\
+        &= \symbfit{a}_j - \sum_{i=1}^{j-1}(\symbfit{q}_i\symbfit{q}_i^T)\symbfit{a}_j \notag\\
+        &= \left(I - \sum_{i=1}^{j-1}\symbfit{q}_i\symbfit{q}_i^T\right)\symbfit{a}_j \label{eq:I_qq_all}
+\end{align}
+となる.ここで、重要な性質を使うことで、MGS法は作られている.それは
+\begin{equation}
+    \symbfit{q}_i\symbfit{q}_j^T = 0 \quad(i\neq j) \label{eq:qq}
+\end{equation}
+式(\ref{eq:qq})を用いて、以下の式から法則性を見出してみよう.
+例えば、
+\begin{align*}
+    (I - \symbfit{q}_1\symbfit{q}_1^T)(I - \symbfit{q}_2\symbfit{q}_2^T) &= I - \symbfit{q}_1\symbfit{q}_1^T - \symbfit{q}_2\symbfit{q}_2^T + \symbfit{q}_1\symbfit{q}_1^T\symbfit{q}_2\symbfit{q}_2^T\\[2mm]
+                                 &=I - \symbfit{q}_1\symbfit{q}_1^T - \symbfit{q}_2\symbfit{q}_2^T + \symbfit{q}_1\cdot0\cdot \symbfit{q}_2^T\\[2mm]
+                                 &=I - \symbfit{q}_1\symbfit{q}_1^T - \symbfit{q}_2\symbfit{q}_2^T\\[2mm]
+                                 &=I - \sum_{i=1}^{2}\symbfit{q}_i\symbfit{q}_i^T
+\end{align*}
+これは式(\ref{eq:I_qq_all})の$j-1=2$の$\Sigma$の形と一致する.
+\begin{table}[H]\centering
+    \renewcommand{\arraystretch}{1.6}
+    \begin{tabular}{l@{$\;=\;$}l@{$\;=\;$}c}
+    $(I - \symbfit{q}_1\symbfit{q}_1^T)(I - \symbfit{q}_2\symbfit{q}_2^T)$ & $I - \symbfit{q}_1\symbfit{q}_1^T - \symbfit{q}_2\symbfit{q}_2^T$ &$ I - \displaystyle\sum_{i=1}^{2}\symbfit{q}_i\symbfit{q}_i^T$\\
+    $(I - \symbfit{q}_1\symbfit{q}_1^T)(I - \symbfit{q}_2\symbfit{q}_2^T)(I - \symbfit{q}_3\symbfit{q}_3^T)$ & $I - \symbfit{q}_1\symbfit{q}_1^T - \symbfit{q}_2\symbfit{q}_2^T  - \symbfit{q}_3\symbfit{q}_3^T$ &$ I -\displaystyle \sum_{i=1}^{3}\symbfit{q}_i\symbfit{q}_i^T$\\
+    \multicolumn{3}{c}{$\vdots$}\\
+    $(I - \symbfit{q}_1\symbfit{q}_1^T)(I - \symbfit{q}_2\symbfit{q}_2^T)\cdots(I - \symbfit{q}_{j-1}\symbfit{q}_{j-1}^T)$ & $I - \symbfit{q}_1\symbfit{q}_1^T - \symbfit{q}_2\symbfit{q}_2^T \cdots - \symbfit{q}_{j-1}\symbfit{q}_{j-1}^T$ &$ I - \displaystyle\sum_{i=1}^{j-1}\symbfit{q}_i\symbfit{q}_i^T$
+    \end{tabular}
+\end{table}
+わかりやすく見えるように、
+\[
+    I - \symbfit{q}_1\symbfit{q}_1^T = P_{\bot \symbfit{q}_1}
+\]
+と表記する.これにより、$\symbfit{v}_j$は$P_{\bot q_k}$の積で表現できることがわかる.式(\ref{eq:I_qq_all})から、
+\begin{align}
+    \symbfit{v}_j &= \left(I - \sum_{i=1}^{j-1}\symbfit{q}_i\symbfit{q}_i^T\right)\symbfit{a}_j\notag\\[2mm]
+        &=P_{\bot \symbfit{q}_{j-1}}\cdots P_{\bot \symbfit{q}_2}P_{\bot \symbfit{q}_1}\symbfit{a}_j \label{eq:P_all}
+\end{align}
+つまり、式(\ref{eq:I_qq_all})のように積を$\symbfit{a}_j$に対して繰り返し減算する形から、$P_{\bot q_k}$という小さい計算を繰り返し積を行うことでも同じ結果にすることができるということを意味している。
+式(\ref{eq:I_qq_all})と式(\ref{eq:P_all})は数学的には完全に一致する。ではどのようにアルゴリズムで達成されるか？MGS法は以下の通り、
+\begin{align*}
+    \symbfit{v}_j &= \symbfit{a}_j\\[2mm]
+        &= P_{\bot \symbfit{q}_1}\symbfit{a}_j\\[2mm]
+        &= P_{\bot \symbfit{q}_2}P_{\bot \symbfit{q}_1}\symbfit{a}_j\\[2mm]
+        &\:\vdots\\[2mm]
+        &=P_{\bot \symbfit{q}_{j-1}}\cdots P_{\bot \symbfit{q}_2}P_{\bot \symbfit{q}_1}\symbfit{a}_j
+\end{align*}
+と掛け合わせていくアルゴリズムである。2行目の計算結果に、$P_{\bot \symbfit{q}_2}$を掛けてと逐次的に行っていく。よりプログラムに即した書き方をする。
+\begin{table}[H]\centering
+\begin{tabular}{cccclcl}
+  & &$ \symbfit{v}_j^{(1)} $ & $=$ & $ \symbfit{a}_j $ \\[0.6em]
+   & &$ \symbfit{v}_j^{(2)} $ & $=$ & $ P_{\perp \symbfit{q}_1} \symbfit{v}_j^{(1)} $&$=$&$ \symbfit{v}_j^{(1)} - \symbfit{q}_1 \symbfit{q}_1^T \symbfit{v}_j^{(1)} $ \\[0.6em]
+&&$ \symbfit{v}_j^{(3)} $ & $=$ & $ P_{\perp \symbfit{q}_2} \symbfit{v}_j^{(2)}$&$=$&$ \symbfit{v}_j^{(2)} - \symbfit{q}_2 \symbfit{q}_2^T \symbfit{v}_j^{(2)} $ \\[0.6em]
+        &    &              & $ \vdots $&&$ \vdots $& \\[0.6em]
+$ \symbfit{v}_j $ & $=$ & $ \symbfit{v}_j^{(j)} $ &$=$ & $P_{\perp \symbfit{q}_{j-1}} \symbfit{v}_j^{(j-1)} $ &$=$&$ \symbfit{v}_j^{(j-1)} - \symbfit{q}_{j-1} \symbfit{q}_{j-1}^T \symbfit{v}_j^{(j-1)} $
+\end{tabular}
+\end{table}
+、$P_{\bot \symbfit{q}_k}$を掛けた結果を引き継いでを繰り返していることがわかり、for文で行うのだろうなとなんとなくわかるだろう。では最後にアルゴリズムを見ておしまいとする。表記方法は同じく参考している。
+\begin{tcolorbox}[colframe=black!80,colback=white,title=Modified Gram--Schmidt Algorithm]
+\begin{minipage}[t]{0.34\textwidth}
+\begin{table}[H]\centering
+    \begin{tabular}{l}
+        \textbf{for} $i=1$ \textbf{to} $n$\\
+        \hspace{0.8cm} $\symbfit{v}_i=\symbfit{a}_i$\\
+        \textbf{for} $i=1$ \textbf{to} $n$\\
+        \hspace{0.8cm} $r_{ii}=\|\symbfit{v}_i\|_2$\\
+        \hspace{0.8cm} $\symbfit{q}_i = \symbfit{v}_i/r_{ii}$\\
+        \hspace{0.8cm} \textbf{for} $j=i+1$ \textbf{to} $n$\\
+        \hspace{1.6cm} $r_{ij}=\symbfit{q}^T_i\symbfit{v}_j$\\
+        \hspace{1.6cm} $\symbfit{v}_j=\symbfit{v}_j - r_{ij}\symbfit{q}_i$\\
+    \end{tabular}
+\end{table}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.65\textwidth}
+    \bigskip
+    \begin{tabular}[H]{|l}
+        MGS法 \\
+        CGS法と異なり、$\symbfit{a}_j$は使わないため、値を直接更新してもいい\\
+        各ベクトルに対して同じ操作をする\\
+        $\symbfit{v}_j$の要素の二乗和を計算(スキップなしなので先に計算が必要)\\
+        $\symbfit{v}_j$を正規化して,$\symbfit{q}_j$とする\\
+        式(\ref{eq:P_all})の計算をおこなうfor文\\
+        $\symbfit{r}_{ij}=\symbfit{q}_i^T\symbfit{a}_j$を計算する\\
+        $\symbfit{v}_k^{(k-1)} - \symbfit{q}_{k-1} \symbfit{q}_{k-1}^T \symbfit{v}_k^{(k-1)} $を行っている\\
+    \end{tabular}
+    \bigskip
+\end{minipage}
+\end{tcolorbox}
+\noindent
